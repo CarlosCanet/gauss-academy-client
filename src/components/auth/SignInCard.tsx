@@ -8,6 +8,7 @@ interface LoginFormData {
   email: string,
   password: string
 }
+
 function SignInCard() {
   const [formData, setFormData] = useState<LoginFormData>({ email: "", password: "" });
   const { authenticateUser } = useContext(AuthContext);

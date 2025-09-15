@@ -4,6 +4,10 @@ import SignupPage from "./pages/auth/SignupPage";
 import ResponsiveAppBar from "./components/main/ResponsiveAppBar";
 import MainPage from "./pages/public/MainPage";
 import NotFoundPage from "./pages/public/NotFoundPage";
+import CoursesPage from "./pages/public/CoursesPage";
+import TeachersPage from "./pages/public/TeachersPage";
+import MethodologyPage from "./pages/public/MethodologyPage";
+import { ContactPage } from "@mui/icons-material";
 
 function App() {
 
@@ -12,8 +16,13 @@ function App() {
       <ResponsiveAppBar />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/Login" element={<LoginPage />} />
-        <Route path="/Signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/teachers" element={<TeachersPage />} />
+        <Route path="/methodology" element={<MethodologyPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

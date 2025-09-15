@@ -14,8 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
-import { Link } from "@mui/material";
-import { useNavigate, Link as RouterLink } from "react-router";
+import { useNavigate, Link } from "react-router";
 
 const pages = ["Courses", "Teachers", "Methodology", "Contact"];
 const settings = ["Profile", "Dashboard", "Logout"];
@@ -60,8 +59,8 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={Link}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -94,7 +93,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: "block", md: "none" } }}>
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} component={Link} to={`/${page.toLowerCase()}`} onClick={handleCloseNavMenu}>
                   <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                 </MenuItem>
               ))}
@@ -105,7 +104,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component={Link}
-            href="/"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -120,7 +119,7 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
+              <Button key={page} component={Link} to={`${page.toLowerCase()}`} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
                 {page}
               </Button>
             ))}
@@ -160,7 +159,7 @@ function ResponsiveAppBar() {
                       </MenuItem>
                     ) : (
                       <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography component={RouterLink} to={`/${setting.toLowerCase()}`} sx={{ textAlign: "center" }}>
+                        <Typography component={Link} to={`/${setting.toLowerCase()}`} sx={{ textAlign: "center" }}>
                           {setting}
                         </Typography>
                       </MenuItem>
@@ -169,7 +168,7 @@ function ResponsiveAppBar() {
                 </Menu>
               </>
             ) : (
-              <Typography component="a" href="/login">
+              <Typography component={Link} to="/login">
                 Login
               </Typography>
             )}
