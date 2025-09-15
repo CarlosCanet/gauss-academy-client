@@ -1,26 +1,4 @@
-export type Role = "Student" | "Admin" | "Staff" | "Admin" | null;
-
-export interface UserCredentials {
-  email: string,
-  password: string
-}
-
-export interface User {
-  _id: string,
-  firstName: string,
-  lastName: string,
-  dateOfBirth: Date,
-  email: string,
-  password: string,
-  dni: string,
-  mobileNumber: number,
-  profileImageUrl: string,
-}
-
-export interface Teacher extends User {
-  previousCourses: Course[],
-  activeCourses: Course[]
-}
+import type { User } from "./user"
 
 export interface Class {
   course: string | Course,

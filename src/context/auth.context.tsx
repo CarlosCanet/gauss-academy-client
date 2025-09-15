@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { service } from "../services/config.services";
-import type { Role } from "../types/types";
+import type { Role } from "../types/user";
+
 
 // Context component (that sends the state contexts and functions)
 type AuthContextType = {
