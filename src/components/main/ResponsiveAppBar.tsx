@@ -15,6 +15,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate, Link } from "react-router";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { fill } from "@cloudinary/url-gen/actions/resize";
 
 const pages = ["Courses", "Teachers", "Methodology", "Contact"];
 const settings = ["Profile", "Dashboard", "Logout"];
@@ -50,6 +52,9 @@ function ResponsiveAppBar() {
       navigate("/ErrorPage");
     }
   };
+
+  const cloud = new Cloudinary({ cloud: { cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME } });
+  const profileImg = cloud.image("samples/smile").resize(fill().width(250).height(250));
 
   return (
     <AppBar position="static">
@@ -129,7 +134,7 @@ function ResponsiveAppBar() {
               <>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={`User image profile`} src={profileImg.toURL()} />
                   </IconButton>
                 </Tooltip>
                 <Menu
