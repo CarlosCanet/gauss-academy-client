@@ -13,7 +13,7 @@ function CoursesPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get("/course?status=Planned");
+      const response = await service.get("/course/info");
       setCourses(response.data);
     } catch (error) {
       console.log(error);

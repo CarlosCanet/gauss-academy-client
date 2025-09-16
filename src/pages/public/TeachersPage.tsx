@@ -11,7 +11,7 @@ function TeachersPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get("/user/teachers");
+      const response = await service.get("/user/teachers/info");
       setTeachers(response.data);
     } catch (error) {
       console.log(error);
