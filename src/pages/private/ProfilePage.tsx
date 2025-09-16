@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import UserInfoForm from "../../components/userInfo/UserInfoForm";
+import UserInfoForm from "../../components/private/userInfo/UserInfoForm";
 import type { UserInfoFormData } from "../../types/user";
 import { service } from "../../services/config.services";
 import { AxiosError } from "axios";

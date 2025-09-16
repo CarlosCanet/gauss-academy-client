@@ -1,6 +1,6 @@
 import type { Course } from "./types";
 
-export type Role = "Student" | "Teacher" | "Staff" | "Admin" | null;
+export type Role = "Student" | "Teacher" | "Staff" | "Admin";
 
 export interface UserCredentials {
   email: string,
@@ -32,6 +32,7 @@ export const initialUser: User = {
 };
 
 export interface Teacher extends User {
+  description: string,
   previousCourses: Course[],
   activeCourses: Course[]
 }

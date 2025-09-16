@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { service } from "../../services/config.services";
-import { initialUser, type UserInfoFormData, type UserInfoFormErrors } from "../../types/user";
+import { service } from "../../../services/config.services";
+import { initialUser, type UserInfoFormData, type UserInfoFormErrors } from "../../../types/user";
 
 type PropsUserInfo = {
   handleSubmit: (formData: UserInfoFormData) => Promise<UserInfoFormErrors | null>;
@@ -19,7 +19,7 @@ function UserInfoForm(props: PropsUserInfo) {
   const getData = async () => {
     try {
       const response = await service.get("/user/profile");
-      setFormData(response.data);
+      setFormData({...response.data, dateOfBirth: response.data.dateOfBirth.slice(0,10)});
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +61,7 @@ function UserInfoForm(props: PropsUserInfo) {
         value={formData.firstName}
         onChange={onChange}
         placeholder="Your first name"
-        label="Firt name"
+        label="First name"
         autoComplete="given-name"
         required
         fullWidth

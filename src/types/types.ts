@@ -25,6 +25,24 @@ export interface Course {
   price: number
 }
 
+export const initialCourse: Course = {
+  _id: "",
+  name: "",
+  slug: "",
+  status: "Planned",
+  imageUrl: "",
+  degreeNames: "",
+  startDate: "",
+  endDate: "",
+  numberOfHours: "",
+  teachers: [],
+  classes: [],
+  price: 0
+};
+
+export type CourseInfoFormData = Omit<Course, "_id">;
+export type CourseInfoFormErrors = Partial<Record<keyof CourseInfoFormData, string>>;
+
 export interface Enrollment {
   student: string | User,
   course: string | Course,

@@ -10,6 +10,8 @@ import MethodologyPage from "./pages/public/MethodologyPage";
 import { ContactPage } from "@mui/icons-material";
 import OnlyRegistered from "./components/protection/OnlyRegistered";
 import ProfilePage from "./pages/private/ProfilePage";
+import MyCoursesPage from "./pages/private/MyCoursesPage";
+import CourseInfoPage from "./pages/private/CourseInfoPage";
 
 function App() {
 
@@ -28,6 +30,8 @@ function App() {
         
         {/* PRIVATE ROUTES */}
         <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
+        <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>} />
+        <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
 
 
         <Route path="*" element={<NotFoundPage />} />

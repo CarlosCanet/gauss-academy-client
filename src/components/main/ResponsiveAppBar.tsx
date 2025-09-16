@@ -18,15 +18,14 @@ import { useNavigate, Link } from "react-router";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 
-const pages = ["Courses", "Teachers", "Methodology", "Contact"];
-const settings = ["Profile", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const { isLoggedIn, authenticateUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  
+  
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -37,11 +36,11 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
+  
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     try {
@@ -52,7 +51,10 @@ function ResponsiveAppBar() {
       navigate("/ErrorPage");
     }
   };
-
+  
+  const pages = ["Courses", "Teachers", "Methodology", "Contact"];
+  const settings = [{ name: "Profile", path: "/profile" }, { name: "My Courses", path: "/my-courses" }, { name: "Dashboard", path: "" }, { name: "Logout", action: handleLogout }];
+  
   const cloud = new Cloudinary({ cloud: { cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME } });
   const profileImg = cloud.image("samples/smile").resize(fill().width(250).height(250));
 
@@ -153,19 +155,19 @@ function ResponsiveAppBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}>
                   {settings.map((setting) =>
-                    setting === "Logout" ? (
+                    !setting.path && setting.action ? (
                       <MenuItem
-                        key={setting}
+                        key={setting.name}
                         onClick={() => {
                           handleCloseUserMenu();
-                          handleLogout();
+                          setting.action();
                         }}>
-                        <Typography sx={{ textAlign: "center" }}>{setting}</Typography>
+                        <Typography sx={{ textAlign: "center" }}>{setting.name}</Typography>
                       </MenuItem>
                     ) : (
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography component={Link} to={`/${setting.toLowerCase()}`} sx={{ textAlign: "center" }}>
-                          {setting}
+                      <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                        <Typography component={Link} to={setting.path} sx={{ textAlign: "center" }}>
+                          {setting.name}
                         </Typography>
                       </MenuItem>
                     )

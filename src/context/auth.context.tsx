@@ -22,7 +22,7 @@ function AuthWrapper(props: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loggedUserId, setLoggedUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [role, setRole] = useState<Role>(null);
+  const [role, setRole] = useState<Role | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   useEffect(() => {
     authenticateUser();
@@ -31,14 +31,13 @@ function AuthWrapper(props: { children: ReactNode }) {
   const authenticateUser = async () => {
     try {
       const response = await service.get("/auth/verify");
-      console.log("Ok", response);
       setIsLoggedIn(true);
       setLoggedUserId(response.data._id);
       setUsername(response.data.firstName);
       setRole(response.data.role);
       setIsAuthenticating(false);
     } catch (error) {
-      console.log("Nope", error);
+      console.log("Error authenticating: ", error);
       setIsLoggedIn(false);
       setUsername(null);
       setLoggedUserId(null);
@@ -47,7 +46,7 @@ function AuthWrapper(props: { children: ReactNode }) {
     }
   }
 
- const passedContext = { isLoggedIn, loggedUserId, role, username, authenticateUser };
+  const passedContext = { isLoggedIn, loggedUserId, role, username, authenticateUser };
 
   if (isAuthenticating) {
     return (
@@ -61,4 +60,4 @@ function AuthWrapper(props: { children: ReactNode }) {
     </AuthContext.Provider>
   )
 }
-export {AuthWrapper, AuthContext }
+export { AuthWrapper, AuthContext }

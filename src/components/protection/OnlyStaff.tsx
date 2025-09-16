@@ -6,8 +6,8 @@ type OnlyRegisteredProps = {
   children: React.ReactNode;
 };
 
-function OnlyRegistered(props: OnlyRegisteredProps) {
+function OnlyStaff(props: OnlyRegisteredProps) {
   const { isLoggedIn, role } = useContext(AuthContext);
   return (isLoggedIn && role === "Staff") ? props.children : <Navigate to="/login" />
 }
-export default OnlyRegistered;
+export default OnlyStaff;
