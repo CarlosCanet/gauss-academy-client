@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Teacher } from "../../types/types";
+import type { Teacher } from "../../types/user";
 import { service } from "../../services/config.services";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 

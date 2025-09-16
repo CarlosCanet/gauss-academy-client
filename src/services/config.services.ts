@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserCredentials } from "../types/types";
+import type { UserCredentials } from "../types/user";
 
 
 export const service = axios.create({
