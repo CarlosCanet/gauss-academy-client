@@ -37,7 +37,7 @@ function AuthWrapper(props: { children: ReactNode }) {
       setRole(checkedUser.role);
       setIsAuthenticating(false);
     } catch (error) {
-      console.log("Error authenticating: ", error);
+      console.error("Error authenticating: ", error);
       setIsLoggedIn(false);
       setUsername(null);
       setLoggedUserId(null);

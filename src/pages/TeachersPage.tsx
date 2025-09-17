@@ -14,7 +14,7 @@ function TeachersPage() {
       const teachers = await getPublicInfoFromAllTeachers();
       setTeachers(teachers);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

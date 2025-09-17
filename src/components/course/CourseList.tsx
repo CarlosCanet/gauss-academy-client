@@ -9,8 +9,9 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SchoolIcon from '@mui/icons-material/School';
 
 type PropsCourseList = {
+  titleList: string;
   courseList: Course[];
-  onDelete: (courseId: string) => Promise<void>;
+  onDelete?: (courseId: string) => Promise<void>;
 };
 
 function CourseList(props: PropsCourseList) {
@@ -37,7 +38,7 @@ function CourseList(props: PropsCourseList) {
       ),
     },
   ];
-  if (role !== "Student" || role === "Student") {
+  if (role !== "Student") {
     columns.push({
       field: "actions",
       type: "actions",
@@ -49,7 +50,7 @@ function CourseList(props: PropsCourseList) {
         // </Button>
           return [
           <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={() => navigate(`/course/${id}`)} />,
-          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => props.onDelete(id.toString())} />]
+          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => props.onDelete!(id.toString())} />]
         }
     });
   }
@@ -69,7 +70,7 @@ function CourseList(props: PropsCourseList) {
   return (
     <div>
       <Typography variant="h3" align="center">
-        Courses
+        {props.titleList}
       </Typography>
       <div style={{ height: 300, width: "100%" }}>
         <DataGrid rows={rows} columns={columns} />

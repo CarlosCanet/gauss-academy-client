@@ -75,7 +75,6 @@ function ClassList(props: PropsClassList) {
   const getData = async () => {
     try {
       const data = await getClassesFromCourse(props.courseId);
-      console.log("DATA:", data);
       setRows(
         data.map((oneClass) => ({
           id: oneClass._id,
@@ -89,7 +88,7 @@ function ClassList(props: PropsClassList) {
         }))
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -113,7 +112,7 @@ function ClassList(props: PropsClassList) {
       await deleteClass(id as string);
       getData();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -134,13 +133,12 @@ function ClassList(props: PropsClassList) {
       if (newRow.isNew) {
         await createClass(props.courseId, newRow as ClassFormData);
       } else {
-        console.log(newRow, newRow.course_id);
-        await editClass(newRow.id, {...newRow, course: newRow.course_id});
+        await editClass(newRow.id, { ...newRow, course: newRow.course_id });
       }
       await getData();
       return newRow;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -172,7 +170,7 @@ function ClassList(props: PropsClassList) {
   return (
     <div>
       <Typography variant="h3" align="center">
-        Classes for *CourseNAME*
+        {rows.length > 0 && rows[0].course ? `Classes for ${rows[0].course}` : "Classes"}
       </Typography>
       <div style={{ height: 300, width: "100%" }}>
         <DataGrid

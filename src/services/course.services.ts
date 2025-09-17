@@ -26,7 +26,7 @@ export const getAllCourses = async (): Promise<Course[]> => {
 }
 
 export const getAllActiveCourses = async (): Promise<Course[]> => {
-  const response = await service.get("/api/course?status=active");
+  const response = await service.get("/course?status=Planned");
   return transformResponseToCourses(response.data);
 };
 

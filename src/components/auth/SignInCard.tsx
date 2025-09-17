@@ -19,9 +19,8 @@ function SignInCard() {
       localStorage.setItem("authToken", response.authToken);
       await authenticateUser();
       navigate("/");
-      console.log("Welcome!");
     } catch (error) {
-      console.log("Error login: ", error);
+      console.error("Error login: ", error);
     }
   }
 

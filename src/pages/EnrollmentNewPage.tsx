@@ -15,7 +15,7 @@ function EnrollmentNewPage(props: PropsEnrollment) {
       await createEnrollment(props.courseId, formData);
       return null;
     } catch (error) {
-      console.log("Error login: ", error);
+      console.error("Error login: ", error);
       if (error instanceof AxiosError && error.response) {
         return Object.fromEntries(
           Object.entries(error.response.data).map(([fieldName, value]) => [

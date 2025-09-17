@@ -13,7 +13,7 @@ function ProfilePage() {
       navigate("/login");
       return null;
     } catch (error) {
-      console.log("Error login: ", error);
+      console.error("Error login: ", error);
       if (error instanceof AxiosError && error.response) {
         return Object.fromEntries(
           Object.entries(error.response.data).map(([fieldName, value]) => [

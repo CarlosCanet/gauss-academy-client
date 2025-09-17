@@ -16,7 +16,7 @@ function CoursesPage() {
       const courses = await getPublicInfoFromAllActiveCourses();
       setCourses(courses);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

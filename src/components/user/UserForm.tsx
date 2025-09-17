@@ -21,7 +21,7 @@ function UserInfoForm(props: PropsUserInfo) {
       const userData = await getMyProfile();
       setFormData(transformUserToForm(userData));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

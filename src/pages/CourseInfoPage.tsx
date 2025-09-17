@@ -19,7 +19,7 @@ function CourseInfoPage() {
       const course = await getCourse(courseId!);
       setFormData(transformCourseToForm(course));
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   };
 
@@ -30,7 +30,7 @@ function CourseInfoPage() {
       navigate(-1);
       return null;
     } catch (error) {
-      console.log("Error login: ", error);
+      console.error("Error login: ", error);
       if (error instanceof AxiosError && error.response) {
         return Object.fromEntries(Object.entries(error.response.data).map(([fieldName, value]) => [fieldName, typeof value === "object" && value && "message" in value ? value.message : "unknown error"]));
       }

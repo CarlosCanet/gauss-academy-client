@@ -3,11 +3,12 @@ import type { Course } from "../types/types";
 import CourseList from "../components/course/CourseList";
 import { AuthContext } from "../context/auth.context";
 import { Button } from "@mui/material";
-import { deleteCourse, getAllCourses } from "../services/course.services";
+import { deleteCourse, getAllActiveCourses, getAllCourses } from "../services/course.services";
 import { getMyEnrollments } from "../services/enrollment.services";
 
 function MyCoursesPage() {
   const [myCourses, setMyCourses] = useState<Course[]>([]);
+  const [activeCourses, setActiveCourses] = useState<Course[]>([]);
   const { role } = useContext(AuthContext);
   useEffect(() => {
     getData();
@@ -18,30 +19,31 @@ function MyCoursesPage() {
     try {
       if (role === "Admin") {
         const courses = await getAllCourses();
-        console.log("Admin:", courses);
         setMyCourses(courses);
         return;
       }
       const enrollments = await getMyEnrollments();
       setMyCourses(enrollments.map((enrollment) => enrollment.course as Course));
+      const activeCourses = await getAllActiveCourses();
+      setActiveCourses(activeCourses);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const onDeleteCourse = async (courseId: string) => {
     try {
-      const response = await deleteCourse(courseId);
-      console.log(response);
+      await deleteCourse(courseId);
       getData();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   return (
     <div>
-      <CourseList courseList={myCourses} onDelete={onDeleteCourse} />
+      <CourseList titleList="My courses" courseList={myCourses} onDelete={onDeleteCourse} />
+      <CourseList titleList="Other courses" courseList={activeCourses.filter(course => myCourses.some(myCourse => myCourse._id !== course._id))} />
       {role === "Admin" && (
           <Button href="/course/newCourse" variant="contained">Create new course</Button>
       )}
