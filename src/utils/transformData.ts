@@ -1,4 +1,4 @@
-import type { CourseClass, ClassFormData, Course, CourseFormData, Enrollment, EnrollmentFormData } from "../types/types";
+import type {  Course, CourseFormData, Enrollment, EnrollmentFormData } from "../types/types";
 import { dateToString } from "./date";
 
 // Course Functions
@@ -10,18 +10,7 @@ export function transformCourseToForm(course: Course): CourseFormData {
   return {...course, startDate: dateToString(course.startDate), endDate: dateToString(course.endDate)}
 }
 
-// Class Functions
-export function transformResponseToClass(data: CourseClass): CourseClass {
-  return { ...data, date: new Date(data.date) };
-}
 
-export function transformResponseToClasses(data: CourseClass[]): CourseClass[] {
-  return data.map(eachClass => transformResponseToClass(eachClass));
-}
-
-export function transformClassToForm(oneClass: CourseClass): ClassFormData {
-  return {...oneClass, date: dateToString(oneClass.date)}
-}
 
 // Enrollment Functions
 export function transformResponseToEnrollment(data: Enrollment): Enrollment {
