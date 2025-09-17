@@ -4,7 +4,7 @@ import { service } from "../services/config.services";
 import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { transformCourseToForm, transformResponseToCourse } from "../utils/transformData";
+import { getCourse, transformCourseToForm } from "../services/course.services";
 
 function CourseInfoPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -17,8 +17,7 @@ function CourseInfoPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get(`/course/${courseId}`);
-      const course = transformResponseToCourse(response.data)
+      const course = await getCourse(courseId!);
       setFormData(transformCourseToForm(course));
     } catch (error) {
       console.log(error)
@@ -26,19 +25,19 @@ function CourseInfoPage() {
   };
 
 
-  const handleSubmit = async (formData: CourseFormData) => {
-    try {
-      await service.put("/user/profile", { ...formData });
-      navigate("/login");
-      return null;
-    } catch (error) {
-      console.log("Error login: ", error);
-      if (error instanceof AxiosError && error.response) {
-        return Object.fromEntries(Object.entries(error.response.data).map(([fieldName, value]) => [fieldName, typeof value === "object" && value && "message" in value ? value.message : "unknown error"]));
-      }
-      return { general: "Unknown error" };
-    }
-  };
+  // const handleSubmit = async (formData: CourseFormData) => {
+  //   try {
+  //     await editProfile(formData);
+  //     navigate("/login");
+  //     return null;
+  //   } catch (error) {
+  //     console.log("Error login: ", error);
+  //     if (error instanceof AxiosError && error.response) {
+  //       return Object.fromEntries(Object.entries(error.response.data).map(([fieldName, value]) => [fieldName, typeof value === "object" && value && "message" in value ? value.message : "unknown error"]));
+  //     }
+  //     return { general: "Unknown error" };
+  //   }
+  // };
 
   return (
     <div>

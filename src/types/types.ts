@@ -1,6 +1,10 @@
 import { dateToString } from "../utils/date";
 import type { User } from "./user"
 
+export interface LoginResponse {
+  authToken: string
+}
+
 export type CourseStatus = "Planned" | "Active" | "Finished";
 export const COURSE_STATUS: CourseStatus[] = ["Planned", "Active", "Finished"];
 
@@ -61,7 +65,7 @@ export const CLASS_TYPES: ClassType[] = ["Online - Streaming", "Online - Video",
 export interface CourseClass {
   _id: string,
   course: string | Course,
-  teachers: string[] | User[],
+  teachers?: string[] | User[],
   numberOfHours: number,
   date: Date,
   classType: ClassType,

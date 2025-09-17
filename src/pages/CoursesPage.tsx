@@ -2,8 +2,8 @@
 
 import { List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { service } from "../services/config.services";
 import type { Course } from "../types/types";
+import { getPublicInfoFromAllActiveCourses } from "../services/course.services";
 
 function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -13,8 +13,8 @@ function CoursesPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get("/course/info");
-      setCourses(response.data);
+      const courses = await getPublicInfoFromAllActiveCourses();
+      setCourses(courses);
     } catch (error) {
       console.log(error);
     }

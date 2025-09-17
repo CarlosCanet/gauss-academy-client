@@ -1,5 +1,5 @@
 import { service } from "./config.services";
-import type { CourseClass } from "../types/types";
+import type { ClassFormData, CourseClass } from "../types/types";
 
 // Class Functions
 function transformResponseToClass(data: CourseClass): CourseClass {
@@ -10,9 +10,9 @@ function transformResponseToClasses(data: CourseClass[]): CourseClass[] {
   return data.map(eachClass => transformResponseToClass(eachClass));
 }
 
-// function transformClassToForm(oneClass: CourseClass): ClassFormData {
-//   return {...oneClass, date: dateToString(oneClass.date)}
-// }
+function transformClassFormToClass(formData: ClassFormData): Partial<CourseClass> {
+  return { ...formData, date: new Date(formData.date) };
+}
 
 // Service functions
 export const getClassesFromCourse = async (courseId: string): Promise<CourseClass[]> => {
@@ -25,8 +25,8 @@ export const getClass = async (classId: string): Promise<CourseClass> => {
   return transformResponseToClass(response.data);
 };
 
-export const createClass = async (courseId: string, classData: Partial<CourseClass>): Promise<CourseClass> => {
-  const response = await service.post(`/class/${courseId}`, classData);
+export const createClass = async (courseId: string, classData: ClassFormData): Promise<CourseClass> => {
+  const response = await service.post(`/class/${courseId}`, transformClassFormToClass(classData));
   return response.data;
 };
 

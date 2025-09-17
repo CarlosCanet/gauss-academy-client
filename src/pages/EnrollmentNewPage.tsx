@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { service } from "../services/config.services";
 import { AxiosError } from "axios";
 import { initialEnrollmentForm, type EnrollmentFormData } from "../types/types";
 import EnrollmentForm from "../components/enrollment/EnrollmentForm";
+import { createEnrollment } from "../services/enrollment.services";
 
 type PropsEnrollment = {
   courseId: string;
@@ -12,7 +12,7 @@ function EnrollmentNewPage(props: PropsEnrollment) {
   const [formData, setFormData] = useState<EnrollmentFormData>(initialEnrollmentForm);
   const handleSubmit = async (formData: EnrollmentFormData) => {
     try {
-      await service.post(`/enrollment/${props.courseId}`, { ...formData });
+      await createEnrollment(props.courseId, formData);
       return null;
     } catch (error) {
       console.log("Error login: ", error);

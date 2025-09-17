@@ -1,9 +1,9 @@
 import { useState } from "react";
 import CourseForm from "../components/course/CourseForm";
-import { service } from "../services/config.services";
 import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
+import { createCourse } from "../services/course.services";
 
 function CourseNewPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -11,7 +11,7 @@ function CourseNewPage() {
   
   const handleSubmit = async (formData: CourseFormData) => {
     try {
-      await service.post("/course", { ...formData });
+      await createCourse(formData);
       navigate(-1);
       return null;
     } catch (error) {

@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { transformClassToForm, transformResponseToClass } from "../utils/transformData";
 import ClassForm from "../components/classCourse/ClassForm";
+import { getClassesFromCourse } from "../services/class.services";
 
 function ClassInfoPage() {
   const [formData, setFormData] = useState<ClassFormData>(initialClassForm);
@@ -17,28 +18,27 @@ function ClassInfoPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get(`/course/${courseId}`);
-      const oneClass = transformResponseToClass(response.data)
-      setFormData(transformClassToForm(oneClass));
+      const classes = await getClassesFromCourse(courseId!);
+      setFormData(transformClassToForm(classes));
     } catch (error) {
       console.log(error)
     }
   };
 
 
-  const handleSubmit = async (formData: ClassFormData) => {
-    try {
-      await service.put("/user/profile", { ...formData });
-      navigate("/login");
-      return null;
-    } catch (error) {
-      console.log("Error login: ", error);
-      if (error instanceof AxiosError && error.response) {
-        return Object.fromEntries(Object.entries(error.response.data).map(([fieldName, value]) => [fieldName, typeof value === "object" && value && "message" in value ? value.message : "unknown error"]));
-      }
-      return { general: "Unknown error" };
-    }
-  };
+  // const handleSubmit = async (formData: ClassFormData) => {
+    // try {
+    //   await editProfile(formData);
+    //   navigate("/login");
+    //   return null;
+    // } catch (error) {
+    //   console.log("Error login: ", error);
+    //   if (error instanceof AxiosError && error.response) {
+    //     return Object.fromEntries(Object.entries(error.response.data).map(([fieldName, value]) => [fieldName, typeof value === "object" && value && "message" in value ? value.message : "unknown error"]));
+    //   }
+    //   return { general: "Unknown error" };
+    // }
+  // };
 
   return (
     <div>

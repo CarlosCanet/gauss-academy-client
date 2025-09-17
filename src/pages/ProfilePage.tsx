@@ -1,15 +1,15 @@
 import { Grid, Typography } from "@mui/material";
 import UserInfoForm from "../components/user/UserForm";
 import type { UserFormData } from "../types/user";
-import { service } from "../services/config.services";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
+import { editProfile } from "../services/user.services";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const handleSubmit = async (formData: UserFormData) => {
     try {
-      await service.put("/user/profile", { ...formData, mobileNumber: Number(formData.mobileNumber) });
+      await editProfile(formData);
       navigate("/login");
       return null;
     } catch (error) {

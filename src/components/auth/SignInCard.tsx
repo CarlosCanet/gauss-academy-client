@@ -1,16 +1,13 @@
 import { Box, Button, Card, Link, TextField, Typography } from "@mui/material"
 import { useContext, useState } from "react";
 import { Link as LinkRouter, useNavigate } from "react-router"
-import { service } from "../../services/config.services";
 import { AuthContext } from "../../context/auth.context";
+import type { UserCredentials } from "../../types/user";
+import { loginUser } from "../../services/user.services";
 
-interface LoginFormData {
-  email: string,
-  password: string
-}
 
 function SignInCard() {
-  const [formData, setFormData] = useState<LoginFormData>({ email: "", password: "" });
+  const [formData, setFormData] = useState<UserCredentials>({ email: "", password: "" });
   const { authenticateUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -18,8 +15,8 @@ function SignInCard() {
   const handleSubmit = async (event: React.FormEvent) => {
     try {
       event.preventDefault();
-      const response = await service.post("/auth/login", formData);
-      localStorage.setItem("authToken", response.data.authToken);
+      const response = await loginUser(formData);
+      localStorage.setItem("authToken", response.authToken);
       await authenticateUser();
       navigate("/");
       console.log("Welcome!");

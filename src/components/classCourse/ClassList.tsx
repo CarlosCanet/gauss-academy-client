@@ -11,7 +11,7 @@ import {
   type GridEventListener,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { CLASS_TYPES, initialClassForm } from "../../types/types";
+import { CLASS_TYPES, initialClassForm, type ClassFormData } from "../../types/types";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -132,9 +132,8 @@ function ClassList(props: PropsClassList) {
   const processRowUpdate = async (newRow: GridRowModel) => {
     try {
       if (newRow.isNew) {
-        await createClass(props.courseId, newRow);
+        await createClass(props.courseId, newRow as ClassFormData);
       } else {
-        console.log("EDIT:", newRow);
         await editClass(newRow.id, {...newRow, course: newRow.course_id});
       }
       await getData();

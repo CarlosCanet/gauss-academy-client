@@ -1,17 +1,16 @@
 import { Box, Card, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
-import { service } from "../../services/config.services";
 import { AxiosError } from "axios";
 import UserInfoForm from "../user/UserForm";
 import type { UserFormData } from "../../types/user";
+import { signUpUser } from "../../services/user.services";
 
 function SignUpCard() {
   const navigate = useNavigate();
 
   const handleSubmit = async (formData: UserFormData) => {
     try {
-      const response = await service.post("/auth/signup", {...formData, mobileNumber: Number(formData.mobileNumber)});
-      localStorage.setItem("authToken", response.data.authToken);
+      await signUpUser(formData);
       navigate("/login");
       return null;
     } catch (error) {

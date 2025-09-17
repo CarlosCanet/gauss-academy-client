@@ -15,7 +15,7 @@ export interface User {
   email: string,
   password: string,
   dni: string,
-  mobileNumber: number,
+  mobileNumber: string,
   profileImageUrl: string,
   role: Role
 }
@@ -30,7 +30,7 @@ export const initialUser: UserFormData = {
   email: "",
   password: "",
   dni: "",
-  mobileNumber: 0,
+  mobileNumber: "",
   profileImageUrl: ""
 };
 

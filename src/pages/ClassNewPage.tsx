@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { service } from "../services/config.services";
 import { AxiosError } from "axios";
 import { initialClassForm, type ClassFormData } from "../types/types";
 import ClassForm from "../components/classCourse/ClassForm";
+import { createClass } from "../services/class.services";
 
 type PropsClass = {
   courseId: string;
@@ -12,7 +12,7 @@ function ClassNewPage(props: PropsClass) {
   const [formData, setFormData] = useState<ClassFormData>(initialClassForm);
   const handleSubmit = async (formData: ClassFormData) => {
     try {
-      await service.post(`/class/${props.courseId}`, { ...formData });
+      await createClass(props.courseId, formData);
       return null;
     } catch (error) {
       console.log("Error login: ", error);

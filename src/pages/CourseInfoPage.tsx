@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from "react-router";
 import CourseForm from "../components/course/CourseForm";
-import { service } from "../services/config.services";
 import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { transformCourseToForm, transformResponseToCourse } from "../utils/transformData";
+import { editCourse, getCourse, transformCourseToForm } from "../services/course.services";
 
 function CourseInfoPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -17,8 +16,7 @@ function CourseInfoPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get(`/course/${courseId}`);
-      const course = transformResponseToCourse(response.data)
+      const course = await getCourse(courseId!);
       setFormData(transformCourseToForm(course));
     } catch (error) {
       console.log(error)
@@ -28,7 +26,7 @@ function CourseInfoPage() {
 
   const handleSubmit = async (formData: CourseFormData) => {
     try {
-      await service.put(`/course/${courseId}`, { ...formData });
+      await editCourse(courseId!, formData);
       navigate(-1);
       return null;
     } catch (error) {

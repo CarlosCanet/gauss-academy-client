@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import type { Course, Enrollment } from "../types/types";
-import { service } from "../services/config.services";
+import type { Course } from "../types/types";
 import CourseList from "../components/course/CourseList";
 import { AuthContext } from "../context/auth.context";
 import { Button } from "@mui/material";
+import { deleteCourse, getAllCourses } from "../services/course.services";
+import { getMyEnrollments } from "../services/enrollment.services";
 
 function MyCoursesPage() {
   const [myCourses, setMyCourses] = useState<Course[]>([]);
@@ -16,13 +17,12 @@ function MyCoursesPage() {
   const getData = async () => {
     try {
       if (role === "Admin") {
-        const response = await service.get("/course");
-        console.log("Admin:", response.data);
-        setMyCourses(response.data);
+        const courses = await getAllCourses();
+        console.log("Admin:", courses);
+        setMyCourses(courses);
         return;
       }
-      const response = await service.get("/enrollment/my-enrollments");
-      const enrollments: Enrollment[] = response.data;
+      const enrollments = await getMyEnrollments();
       setMyCourses(enrollments.map((enrollment) => enrollment.course as Course));
     } catch (error) {
       console.log(error);
@@ -31,7 +31,7 @@ function MyCoursesPage() {
 
   const onDeleteCourse = async (courseId: string) => {
     try {
-      const response = await service.delete(`/course/${courseId}`);
+      const response = await deleteCourse(courseId);
       console.log(response);
       getData();
     } catch (error) {

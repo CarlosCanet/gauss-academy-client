@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Teacher } from "../types/user";
-import { service } from "../services/config.services";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { getPublicInfoFromAllTeachers } from "../services/user.services";
 
 function TeachersPage() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -11,8 +11,8 @@ function TeachersPage() {
 
   const getData = async () => {
     try {
-      const response = await service.get("/user/teachers/info");
-      setTeachers(response.data);
+      const teachers = await getPublicInfoFromAllTeachers();
+      setTeachers(teachers);
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
-import { service } from "../services/config.services";
 import type { Role } from "../types/user";
+import { verifyUser } from "../services/user.services";
 
 
 // Context component (that sends the state contexts and functions)
@@ -30,11 +30,11 @@ function AuthWrapper(props: { children: ReactNode }) {
 
   const authenticateUser = async () => {
     try {
-      const response = await service.get("/auth/verify");
+      const checkedUser = await verifyUser();
       setIsLoggedIn(true);
-      setLoggedUserId(response.data._id);
-      setUsername(response.data.firstName);
-      setRole(response.data.role);
+      setLoggedUserId(checkedUser._id);
+      setUsername(checkedUser.firstName);
+      setRole(checkedUser.role);
       setIsAuthenticating(false);
     } catch (error) {
       console.log("Error authenticating: ", error);
