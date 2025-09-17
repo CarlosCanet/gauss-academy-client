@@ -2,7 +2,7 @@ import { Box, Card, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import { service } from "../../services/config.services";
 import { AxiosError } from "axios";
-import UserInfoForm from "../private/user/UserForm";
+import UserInfoForm from "../user/UserForm";
 import type { UserFormData } from "../../types/user";
 
 function SignUpCard() {

@@ -52,11 +52,10 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <AuthWrapper>
-        <CssBaseline>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </CssBaseline>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
       </AuthWrapper>
     </BrowserRouter>
   </StrictMode>

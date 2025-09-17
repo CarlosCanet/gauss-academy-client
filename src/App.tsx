@@ -1,19 +1,20 @@
 import { Route, Routes } from "react-router";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
-import ResponsiveAppBar from "./components/main/ResponsiveAppBar";
-import MainPage from "./pages/public/MainPage";
-import NotFoundPage from "./pages/public/NotFoundPage";
-import CoursesPage from "./pages/public/CoursesPage";
-import TeachersPage from "./pages/public/TeachersPage";
-import MethodologyPage from "./pages/public/MethodologyPage";
-import OnlyRegistered from "./components/protection/OnlyRegistered";
-import ProfilePage from "./pages/private/ProfilePage";
-import MyCoursesPage from "./pages/private/MyCoursesPage";
-import CourseInfoPage from "./pages/private/CourseInfoPage";
-import ContactPage from "./pages/public/ContactPage";
-import CourseNewPage from "./pages/private/CourseNewPage";
-import OnlyAdmin from "./components/protection/OnlyAdmin";
+import ResponsiveAppBar from "./components/UI/ResponsiveAppBar";
+import MainPage from "./pages/MainPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import CoursesPage from "./pages/CoursesPage";
+import TeachersPage from "./pages/TeachersPage";
+import MethodologyPage from "./pages/MethodologyPage";
+import OnlyRegistered from "./components/auth/OnlyRegistered";
+import ProfilePage from "./pages/ProfilePage";
+import MyCoursesPage from "./pages/MyCoursesPage";
+import CourseInfoPage from "./pages/CourseInfoPage";
+import ContactPage from "./pages/ContactPage";
+import CourseNewPage from "./pages/CourseNewPage";
+import OnlyAdmin from "./components/auth/OnlyAdmin";
+import CourseClassListPage from "./pages/CourseClassListPage";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>} />
         <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
         <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>} />
+        <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>} />
         
         {/* <Route path="/enrollment/:enrollmentId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} /> */}
 

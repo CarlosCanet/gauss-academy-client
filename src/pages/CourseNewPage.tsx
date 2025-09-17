@@ -1,14 +1,18 @@
 import { useState } from "react";
-import CourseForm from "../../components/private/course/CourseForm";
-import { service } from "../../services/config.services";
-import { initialCourseForm, type CourseFormData } from "../../types/types";
+import CourseForm from "../components/course/CourseForm";
+import { service } from "../services/config.services";
+import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router";
 
 function CourseNewPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
+  const navigate = useNavigate();
+  
   const handleSubmit = async (formData: CourseFormData) => {
     try {
       await service.post("/course", { ...formData });
+      navigate(-1);
       return null;
     } catch (error) {
       console.log("Error login: ", error);

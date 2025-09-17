@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import MethodologyCard from "../../components/main/MethodologyCard";
+import MethodologyCard from "../components/UI/MethodologyCard";
 
 function MainPage() {
   return (

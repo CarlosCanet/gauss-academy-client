@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { service } from "../../services/config.services";
+import { service } from "../services/config.services";
 import { AxiosError } from "axios";
-import { initialClassForm, type ClassFormData } from "../../types/types";
-import ClassForm from "../../components/private/class/ClassForm";
+import { initialClassForm, type ClassFormData } from "../types/types";
+import ClassForm from "../components/classCourse/ClassForm";
 
 type PropsClass = {
   courseId: string;

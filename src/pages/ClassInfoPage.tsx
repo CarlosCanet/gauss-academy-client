@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router";
-import CourseForm from "../../components/private/course/CourseForm";
-import { service } from "../../services/config.services";
-import { initialCourseForm, type CourseFormData } from "../../types/types";
+import { service } from "../services/config.services";
+import { initialClassForm, type ClassFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { transformCourseToForm, transformResponseToCourse } from "../../utils/transformData";
+import { transformClassToForm, transformResponseToClass } from "../utils/transformData";
+import ClassForm from "../components/classCourse/ClassForm";
 
-function CourseInfoPage() {
-  const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
+function ClassInfoPage() {
+  const [formData, setFormData] = useState<ClassFormData>(initialClassForm);
   const navigate = useNavigate();
   const { courseId } = useParams();
   useEffect(() => {
@@ -18,15 +18,15 @@ function CourseInfoPage() {
   const getData = async () => {
     try {
       const response = await service.get(`/course/${courseId}`);
-      const course = transformResponseToCourse(response.data)
-      setFormData(transformCourseToForm(course));
+      const oneClass = transformResponseToClass(response.data)
+      setFormData(transformClassToForm(oneClass));
     } catch (error) {
       console.log(error)
     }
   };
 
 
-  const handleSubmit = async (formData: CourseFormData) => {
+  const handleSubmit = async (formData: ClassFormData) => {
     try {
       await service.put("/user/profile", { ...formData });
       navigate("/login");
@@ -42,8 +42,8 @@ function CourseInfoPage() {
 
   return (
     <div>
-      <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData}/>
+      <ClassForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData}/>
     </div>
   );
 }
-export default CourseInfoPage;
+export default ClassInfoPage;

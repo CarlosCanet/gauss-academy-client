@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { COURSE_STATUS, type CourseFormData, type CourseFormErrors } from "../../../types/types";
-import { AuthContext } from "../../../context/auth.context";
+import { COURSE_STATUS, type CourseFormData, type CourseFormErrors } from "../../types/types";
+import { AuthContext } from "../../context/auth.context";
 
 type PropsCourseForm = {
   handleSubmit: (formData: CourseFormData) => Promise<CourseFormErrors | null>;
@@ -89,7 +89,6 @@ function CourseForm(props: PropsCourseForm) {
         placeholder="01/05/1990"
         label="End date"
         autoComplete="date"
-        required
         fullWidth
         variant="outlined"
         slotProps={{ inputLabel: { shrink: true }, input: { readOnly: role === "Student" } }}
@@ -107,11 +106,11 @@ function CourseForm(props: PropsCourseForm) {
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
       />
-      {role !== "Student" &&
+      {/* {role !== "Student" &&
         formData.teachers.map((teacher, index) => (
           <TextField
             error={Boolean(teacher)}
-            helperText={formErrors.teachers![index]}
+            helperText={formErrors.teachers[index]}
             type="text"
             name="numberOfHours"
             value={formData.numberOfHours}
@@ -122,7 +121,7 @@ function CourseForm(props: PropsCourseForm) {
             variant="outlined"
             slotProps={{ input: { readOnly: false } }}
           />
-        ))}
+        ))} */}
       <TextField
         error={Boolean(formErrors.price)}
         helperText={formErrors.price}

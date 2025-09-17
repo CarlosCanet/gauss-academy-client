@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { service } from "../../../services/config.services";
-import { initialUser, type UserFormData, type UserFormErrors } from "../../../types/user";
+import { service } from "../../services/config.services";
+import { initialUser, type UserFormData, type UserFormErrors } from "../../types/user";
 
 type PropsUserInfo = {
   handleSubmit: (formData: UserFormData) => Promise<UserFormErrors | null>;

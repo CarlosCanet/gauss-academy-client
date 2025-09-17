@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { service } from "../../services/config.services";
+import { service } from "../services/config.services";
 import { AxiosError } from "axios";
-import { initialEnrollmentForm, type EnrollmentFormData } from "../../types/types";
-import EnrollmentForm from "../../components/private/enrollment/EnrollmentForm";
+import { initialEnrollmentForm, type EnrollmentFormData } from "../types/types";
+import EnrollmentForm from "../components/enrollment/EnrollmentForm";
 
 type PropsEnrollment = {
   courseId: string;

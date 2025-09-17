@@ -1,7 +1,7 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import type { EnrollmentFormData, EnrollmentFormErrors } from "../../../types/types";
-import { AuthContext } from "../../../context/auth.context";
+import type { EnrollmentFormData, EnrollmentFormErrors } from "../../types/types";
+import { AuthContext } from "../../context/auth.context";
 
 type PropsEnrollmentForm = {
   handleSubmit: (formData: EnrollmentFormData) => Promise<EnrollmentFormErrors | null>;

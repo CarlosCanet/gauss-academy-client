@@ -1,3 +1,4 @@
+import { dateToString } from "../utils/date";
 import type { User } from "./user"
 
 export type CourseStatus = "Planned" | "Active" | "Finished";
@@ -14,7 +15,7 @@ export interface Course {
   endDate: Date,
   numberOfHours: string,
   teachers: string[] | User[],
-  classes: Class[],
+  classes: CourseClass[],
   price: number
 }
 
@@ -28,7 +29,7 @@ export const initialCourseForm: CourseFormData = {
   status: "Planned",
   imageUrl: "",
   degreeNames: "",
-  startDate: "",
+  startDate: dateToString(new Date()),
   endDate: "",
   numberOfHours: "",
   teachers: [],
@@ -57,23 +58,23 @@ export const initialEnrollmentForm: EnrollmentFormData = {
 export type ClassType = "Online - Streaming" | "Online - Video" | "In-Person";
 export const CLASS_TYPES: ClassType[] = ["Online - Streaming", "Online - Video", "In-Person"];
 
-export interface Class {
+export interface CourseClass {
   _id: string,
   course: string | Course,
   teachers: string[] | User[],
   numberOfHours: number,
   date: Date,
-  type: ClassType,
+  classType: ClassType,
   onlineUrl?: string,
   classroomName?: string,
 }
-export type ClassFormData = Omit<Class, "_id" | "date"> & { date: string };
+export type ClassFormData = Omit<CourseClass, "_id" | "date"> & { date: string };
 export type ClassFormErrors = Partial<Record<keyof ClassFormData, string>>;
 export const initialClassForm: ClassFormData = {
   course: "",
   teachers: [],
   numberOfHours: 0,
   date: "",
-  type: "Online - Streaming",
+  classType: "Online - Streaming",
   onlineUrl: "",
 }

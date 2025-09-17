@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
-import type { Class } from "../../../types/types";
+import type { CourseClass } from "../../types/types";
 
 type PropsClassList = {
-  classList: Class[];
+  classList: CourseClass[];
 };
 
 function ClassList(props: PropsClassList) {
@@ -23,7 +23,7 @@ function ClassList(props: PropsClassList) {
       course: oneClass.course,
       numberOfHours: oneClass.numberOfHours,
       date: oneClass.date,
-      type: oneClass.type,
+      type: oneClass.classType,
       onlineUrl: oneClass.onlineUrl,
       classroomName: oneClass.classroomName,
     };

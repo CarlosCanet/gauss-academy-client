@@ -1,8 +1,8 @@
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
 import { Typography } from "@mui/material";
-import type { User } from "../../../types/user";
+import type { User } from "../../types/user";
 import { useContext } from "react";
-import { AuthContext } from "../../../context/auth.context";
+import { AuthContext } from "../../context/auth.context";
 
 type PropsCourseList = {
   userList: User[];

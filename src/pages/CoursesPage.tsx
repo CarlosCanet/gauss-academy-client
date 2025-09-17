@@ -2,8 +2,8 @@
 
 import { List, ListItem, ListItemText, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { service } from "../../services/config.services";
-import type { Course } from "../../types/types";
+import { service } from "../services/config.services";
+import type { Course } from "../types/types";
 
 function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);

@@ -1,8 +1,8 @@
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import type { ClassFormData, ClassFormErrors } from "../../../types/types";
-import { CLASS_TYPES } from "../../../types/types";
-import { AuthContext } from "../../../context/auth.context";
+import type { ClassFormData, ClassFormErrors } from "../../types/types";
+import { CLASS_TYPES } from "../../types/types";
+import { AuthContext } from "../../context/auth.context";
 
 type PropsClassForm = {
   handleSubmit: (formData: ClassFormData) => Promise<ClassFormErrors | null>;
@@ -72,10 +72,10 @@ function ClassForm(props: PropsClassForm) {
       />
       <Autocomplete
         options={CLASS_TYPES}
-        value={formData.type}
+        value={formData.classType}
         onChange={(_, newValue) => {
           if (newValue) {
-            setFormData((prevState) => ({ ...prevState, type: newValue }));
+            setFormData((prevState) => ({ ...prevState, classType: newValue }));
           }
         }}
         renderInput={(params) => (
@@ -89,7 +89,7 @@ function ClassForm(props: PropsClassForm) {
           />
         )}
       />
-      {formData.type === "In-Person" ? 
+      {formData.classType === "In-Person" ? 
         <TextField
         error={Boolean(formErrors.classroomName)}
         helperText={formErrors.classroomName}

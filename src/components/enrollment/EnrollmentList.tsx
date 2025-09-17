@@ -1,4 +1,4 @@
-import type { Enrollment } from "../../../types/types";
+import type { Enrollment } from "../../types/types";
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
 import { Typography } from "@mui/material";
 
