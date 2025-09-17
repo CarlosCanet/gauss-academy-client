@@ -83,8 +83,8 @@ function ClassForm(props: PropsClassForm) {
             {...params}
             label="Class Type"
             name="type"
-            error={Boolean(formErrors.type)}
-            helperText={formErrors.type}
+            error={Boolean(formErrors.classType)}
+            helperText={formErrors.classType}
             slotProps={{ input: { readOnly: role === "Student" } }}
           />
         )}
