@@ -79,7 +79,7 @@ function ClassList(props: PropsClassList) {
       setRows(
         data.map((oneClass) => ({
           id: oneClass._id,
-          course_id: typeof oneClass.course === "object" ? oneClass.course._id : "",
+          course_id: typeof oneClass.course === "object" ? oneClass.course._id : oneClass.course,
           course: typeof oneClass.course === "object" ? oneClass.course.name : oneClass.course,
           numberOfHours: oneClass.numberOfHours,
           date: oneClass.date,
@@ -134,6 +134,7 @@ function ClassList(props: PropsClassList) {
       if (newRow.isNew) {
         await createClass(props.courseId, newRow as ClassFormData);
       } else {
+        console.log(newRow, newRow.course_id);
         await editClass(newRow.id, {...newRow, course: newRow.course_id});
       }
       await getData();

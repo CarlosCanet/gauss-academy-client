@@ -3,7 +3,7 @@ import type { ClassFormData, CourseClass } from "../types/types";
 
 // Class Functions
 function transformResponseToClass(data: CourseClass): CourseClass {
-  return { ...data, date: new Date(data.date), course: typeof data.course === "object" && data.course ? data.course.name : data.course };
+  return { ...data, date: new Date(data.date) };
 }
 
 function transformResponseToClasses(data: CourseClass[]): CourseClass[] {
