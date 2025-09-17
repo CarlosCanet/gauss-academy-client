@@ -1,16 +1,16 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { service } from "../../../services/config.services";
-import { initialUser, type UserInfoFormData, type UserInfoFormErrors } from "../../../types/user";
+import { initialUser, type UserFormData, type UserFormErrors } from "../../../types/user";
 
 type PropsUserInfo = {
-  handleSubmit: (formData: UserInfoFormData) => Promise<UserInfoFormErrors | null>;
+  handleSubmit: (formData: UserFormData) => Promise<UserFormErrors | null>;
   actionText: string;
 };
 
 function UserInfoForm(props: PropsUserInfo) {
-  const [formData, setFormData] = useState<UserInfoFormData>(initialUser);
-  const [formErrors, setFormErrors] = useState<UserInfoFormErrors>({});
+  const [formData, setFormData] = useState<UserFormData>(initialUser);
+  const [formErrors, setFormErrors] = useState<UserFormErrors>({});
 
   useEffect(() => {
     getData();

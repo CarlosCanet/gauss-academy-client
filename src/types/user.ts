@@ -19,11 +19,10 @@ export interface User {
   profileImageUrl: string,
 }
 
-export const initialUser: User = {
-  _id: "",
+export const initialUser: UserFormData = {
   firstName: "",
   lastName: "",
-  dateOfBirth: new Date(),
+  dateOfBirth: "",
   email: "",
   password: "",
   dni: "",
@@ -37,5 +36,5 @@ export interface Teacher extends User {
   activeCourses: Course[]
 }
 
-export type UserInfoFormData = Omit<User, "_id">;
-export type UserInfoFormErrors = Partial<Record<keyof UserInfoFormData, string>>;
+export type UserFormData = Omit<User, "_id" | "dateOfBirth"> & { dateOfBirth: string };
+export type UserFormErrors = Partial<Record<keyof UserFormData, string>>;

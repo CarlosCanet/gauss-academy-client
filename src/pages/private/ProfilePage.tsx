@@ -1,13 +1,13 @@
 import { Grid, Typography } from "@mui/material";
-import UserInfoForm from "../../components/private/userInfo/UserInfoForm";
-import type { UserInfoFormData } from "../../types/user";
+import UserInfoForm from "../../components/private/user/UserForm";
+import type { UserFormData } from "../../types/user";
 import { service } from "../../services/config.services";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const handleSubmit = async (formData: UserInfoFormData) => {
+  const handleSubmit = async (formData: UserFormData) => {
     try {
       await service.put("/user/profile", { ...formData, mobileNumber: Number(formData.mobileNumber) });
       navigate("/login");

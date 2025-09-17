@@ -1,6 +1,4 @@
 import axios from "axios";
-import type { UserCredentials } from "../types/user";
-
 
 export const service = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}/api`
@@ -13,7 +11,3 @@ service.interceptors.request.use((config) => {
   }
   return config;
 })
-
-export const loginService = (userCredentials: UserCredentials) => {
-  return service.post("/auth/login", userCredentials);
-}

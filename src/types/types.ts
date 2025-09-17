@@ -1,32 +1,28 @@
 import type { User } from "./user"
 
-export interface Class {
-  course: string | Course,
-  teachers: string[] | User[],
-  numberOfHours: number,
-  date: Date,
-  type: "Online - Streaming" | "Online - Video" | "In-Person",
-  onlineUrl: string,
-  classroomName: string,
-}
+export type CourseStatus = "Planned" | "Active" | "Finished";
+export const COURSE_STATUS: CourseStatus[] = ["Planned", "Active", "Finished"];
 
 export interface Course {
   _id: string,
   name: string,
   slug: string,
-  status: "Planned" | "Active" | "Finished",
+  status: CourseStatus,
   imageUrl: string,
   degreeNames: string,
-  startDate: string,
-  endDate: string,
+  startDate: Date,
+  endDate: Date,
   numberOfHours: string,
   teachers: string[] | User[],
   classes: Class[],
   price: number
 }
 
-export const initialCourse: Course = {
-  _id: "",
+
+export type CourseFormData = Omit<Course, "_id" | "startDate" | "endDate"> & { startDate: string, endDate: string };
+export type CourseFormErrors = Partial<Record<keyof CourseFormData, string>>;
+
+export const initialCourseForm: CourseFormData = {
   name: "",
   slug: "",
   status: "Planned",
@@ -40,12 +36,43 @@ export const initialCourse: Course = {
   price: 0
 };
 
-export type CourseInfoFormData = Omit<Course, "_id">;
-export type CourseInfoFormErrors = Partial<Record<keyof CourseInfoFormData, string>>;
-
 export interface Enrollment {
+  _id: string,
   student: string | User,
   course: string | Course,
   endDate: Date,
-  discountPercent: number
+  discountPercent: number,
+  createdAt?: number,
+  updatedAt?: number
+}
+export type EnrollmentFormData = Omit<Enrollment, "_id" | "endDate"> & { endDate: string };
+export type EnrollmentFormErrors = Partial<Record<keyof EnrollmentFormData, string>>;
+export const initialEnrollmentForm: EnrollmentFormData = {
+  student: "", 
+  course: "", 
+  endDate: "", 
+  discountPercent: 0
+}
+
+export type ClassType = "Online - Streaming" | "Online - Video" | "In-Person";
+export const CLASS_TYPES: ClassType[] = ["Online - Streaming", "Online - Video", "In-Person"];
+
+export interface Class {
+  course: string | Course,
+  teachers: string[] | User[],
+  numberOfHours: number,
+  date: Date,
+  type: ClassType,
+  onlineUrl?: string,
+  classroomName?: string,
+}
+export type ClassFormData = Omit<Class, "_id" | "date"> & { date: string };
+export type ClassFormErrors = Partial<Record<keyof ClassFormData, string>>;
+export const initialClassForm: ClassFormData = {
+  course: "",
+  teachers: [],
+  numberOfHours: 0,
+  date: "",
+  type: "Online - Streaming",
+  onlineUrl: "",
 }

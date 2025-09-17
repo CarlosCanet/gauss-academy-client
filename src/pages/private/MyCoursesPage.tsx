@@ -31,9 +31,9 @@ function MyCoursesPage() {
     { field: "numberOfHours", headerName: "Hours num" },
     { field: "price", headerName: "Price" },
   ];
-  if (role !== "Student") {
+  // if (role !== "Student") {
     columns.push({ field: "details", headerName: "More details", sortable: false, renderCell: (params) => (<Button variant="contained" onClick={() => navigate(`/course/${params.row.id}`)}>More details</Button>) });
-  }
+  // }
 
   const rows: GridRowsProp = myEnrollments
     .map((enrollment) => {

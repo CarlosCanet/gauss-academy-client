@@ -1,12 +1,32 @@
-import { useNavigate } from "react-router";
-import CourseInfoForm from "../../components/private/courseInfo/CourseInfoForm";
+import { useNavigate, useParams } from "react-router";
+import CourseForm from "../../components/private/course/CourseForm";
 import { service } from "../../services/config.services";
-import type { CourseInfoFormData, CourseInfoFormErrors } from "../../types/types";
+import { initialCourseForm, type CourseFormData } from "../../types/types";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { transformCourseToForm, transformResponseToCourse } from "../../utils/transformData";
 
 function CourseInfoPage() {
+  const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
   const navigate = useNavigate();
-  const handleSubmit = async (formData: CourseInfoFormData) => {
+  const { courseId } = useParams();
+  useEffect(() => {
+    getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getData = async () => {
+    try {
+      const response = await service.get(`/course/${courseId}`);
+      const course = transformResponseToCourse(response.data)
+      setFormData(transformCourseToForm(course));
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+
+  const handleSubmit = async (formData: CourseFormData) => {
     try {
       await service.put("/user/profile", { ...formData });
       navigate("/login");
@@ -22,7 +42,7 @@ function CourseInfoPage() {
 
   return (
     <div>
-      <CourseInfoForm actionText="Edit" handleSubmit={handleSubmit} />
+      <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData}/>
     </div>
   );
 }
