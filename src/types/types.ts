@@ -58,6 +58,7 @@ export type ClassType = "Online - Streaming" | "Online - Video" | "In-Person";
 export const CLASS_TYPES: ClassType[] = ["Online - Streaming", "Online - Video", "In-Person"];
 
 export interface Class {
+  _id: string,
   course: string | Course,
   teachers: string[] | User[],
   numberOfHours: number,
