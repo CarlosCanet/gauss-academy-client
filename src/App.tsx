@@ -12,6 +12,8 @@ import ProfilePage from "./pages/private/ProfilePage";
 import MyCoursesPage from "./pages/private/MyCoursesPage";
 import CourseInfoPage from "./pages/private/CourseInfoPage";
 import ContactPage from "./pages/public/ContactPage";
+import CourseNewPage from "./pages/private/CourseNewPage";
+import OnlyAdmin from "./components/protection/OnlyAdmin";
 
 function App() {
 
@@ -30,8 +32,10 @@ function App() {
         
         {/* PRIVATE ROUTES */}
         <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
+        <Route path="/profile/admin" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
         <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>} />
         <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
+        <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>} />
         
         {/* <Route path="/enrollment/:enrollmentId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} /> */}
 

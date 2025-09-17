@@ -41,22 +41,6 @@ function CourseForm(props: PropsCourseForm) {
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
       />
-      {role !== "Student" && (
-        <TextField
-          error={Boolean(formErrors.slug)}
-          helperText={formErrors.slug}
-          type="slug"
-          name="slug"
-          value={formData.slug}
-          onChange={onChange}
-          label="slug"
-          autoFocus
-          required
-          fullWidth
-          variant="outlined"
-          slotProps={{ input: { readOnly: false } }}
-        />
-      )}
       <Autocomplete
         options={COURSE_STATUS}
         value={formData.status}
@@ -76,7 +60,6 @@ function CourseForm(props: PropsCourseForm) {
         onChange={onChange}
         label="Course image url"
         autoComplete="url"
-        required
         fullWidth
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
@@ -120,7 +103,6 @@ function CourseForm(props: PropsCourseForm) {
         onChange={onChange}
         label="Number of hours"
         autoComplete="number"
-        required
         fullWidth
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
@@ -136,7 +118,6 @@ function CourseForm(props: PropsCourseForm) {
             onChange={onChange}
             label="Number of hours"
             autoComplete="number"
-            required
             fullWidth
             variant="outlined"
             slotProps={{ input: { readOnly: false } }}
@@ -151,7 +132,6 @@ function CourseForm(props: PropsCourseForm) {
         onChange={onChange}
         label="Price"
         autoComplete="eur"
-        required
         fullWidth
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
