@@ -1,9 +1,11 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Avatar, Button, Grid, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { initialUser, type UserFormData, type UserFormErrors } from "../../types/user";
 import { getMyProfile, transformUserToForm, uploadImage } from "../../services/user.services";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router";
 
 type PropsUserInfo = {
   handleSubmit: (formData: UserFormData) => Promise<UserFormErrors | null>;
@@ -32,10 +34,12 @@ function UserInfoForm(props: PropsUserInfo) {
   const [formErrors, setFormErrors] = useState<UserFormErrors>({});
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [fileInfo, setFileInfo] = useState<FileInfo>({ file: null, previewURL: "" });
-
+  const { isLoggedIn, profileImgUrl } = useContext(AuthContext);
+  const navigate = useNavigate();
   useEffect(() => {
     getData();
     return () => URL.revokeObjectURL(fileInfo.previewURL);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getData = async () => {
@@ -82,7 +86,20 @@ function UserInfoForm(props: PropsUserInfo) {
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}>
+    <Grid container component="form" onSubmit={onSubmit} noValidate spacing={3} sx={{ alignItems: "center" }}>
+      <Grid size={{ xs: 6, lg: 3 }} offset={{ lg: 3 }}>
+        <Avatar
+          sx={{ width: 150, height: 150 }}
+          alt="Profile image"
+          src={fileInfo.previewURL ? fileInfo.previewURL : isLoggedIn ? (profileImgUrl as string) : ""}
+        />
+      </Grid>
+      <Grid size={6}>
+        <Button component="label" role={undefined} variant="contained" startIcon={<CloudUploadIcon />} loading={isUploading}>
+          Upload image
+          <VisuallyHiddenInput type="file" onChange={onUpload} multiple />
+        </Button>
+      </Grid>
       <TextField
         error={Boolean(formErrors.email)}
         helperText={formErrors.email}
@@ -99,17 +116,19 @@ function UserInfoForm(props: PropsUserInfo) {
         variant="outlined"
         // color={formErrors.email ? "primary" : "error"}
       />
-      <TextField
-        name="password"
-        type="password"
-        label="Password"
-        autoComplete="new-password"
-        value={formData.password}
-        onChange={onChange}
-        required
-        fullWidth
-        variant="outlined"
-      />
+      {!isLoggedIn && (
+        <TextField
+          name="password"
+          type="password"
+          label="Password"
+          autoComplete="new-password"
+          value={formData.password}
+          onChange={onChange}
+          required
+          fullWidth
+          variant="outlined"
+        />
+      )}
       <TextField
         error={Boolean(formErrors.firstName)}
         helperText={formErrors.firstName}
@@ -138,7 +157,9 @@ function UserInfoForm(props: PropsUserInfo) {
         fullWidth
         variant="outlined"
       />
-      <TextField
+      <Grid
+        size={6}
+        component={TextField}
         error={Boolean(formErrors.dateOfBirth)}
         helperText={formErrors.dateOfBirth}
         type="date"
@@ -153,7 +174,9 @@ function UserInfoForm(props: PropsUserInfo) {
         variant="outlined"
         slotProps={{ inputLabel: { shrink: true } }}
       />
-      <TextField
+      <Grid
+        size={6}
+        component={TextField}
         error={Boolean(formErrors.dni)}
         helperText={formErrors.dni}
         type="text"
@@ -181,31 +204,17 @@ function UserInfoForm(props: PropsUserInfo) {
         fullWidth
         variant="outlined"
       />
-      {/* <TextField
-        error={Boolean(formErrors.profileImageUrl)}
-        helperText={formErrors.profileImageUrl}
-        type="text"
-        name="profileImageUrl"
-        value={formData.profileImageUrl}
-        onChange={onChange}
-        placeholder="Image URL"
-        label="Your profile image"
-        autoComplete="url"
-        required
-        fullWidth
-        variant="outlined"
-      /> */}
-      {/* {formData.profileImageUrl && <img src={formData.profileImageUrl} alt="Uploaded image" height="200 px"/>} */}
-      {fileInfo.previewURL !== "" && <img src={fileInfo.previewURL} alt="Uploaded image" height="200 px" />}
-      <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />} loading={isUploading}>
-        Upload image
-        <VisuallyHiddenInput type="file" onChange={onUpload} multiple />
-      </Button>
-
-      <Button type="submit" fullWidth variant="contained">
-        {props.actionText}
-      </Button>
-    </Box>
+      <Grid size={3} offset={3}>
+        <Button type="submit" fullWidth variant="contained">
+          {props.actionText}
+        </Button>
+      </Grid>
+      <Grid size={3}>
+        <Button variant="outlined" fullWidth color="error" onClick={()=> navigate(-1)}>
+          Back
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 export default UserInfoForm;

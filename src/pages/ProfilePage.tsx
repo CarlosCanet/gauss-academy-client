@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import UserInfoForm from "../components/user/UserForm";
 import type { UserFormData } from "../types/user";
 import { AxiosError } from "axios";
@@ -31,9 +31,8 @@ function ProfilePage() {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{marginTop: 5}}>
       <Grid size={10} offset={1}>
-        <Typography align="center">Profile</Typography>
         <UserInfoForm handleSubmit={handleSubmit} actionText="Edit info" />
       </Grid>
     </Grid>
