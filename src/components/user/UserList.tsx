@@ -1,10 +1,10 @@
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
 import { Avatar, Chip, Typography, type ChipProps } from "@mui/material";
-import { ROLE_TYPES, type Role, type User } from "../../types/user";
+import { ROLE_TYPES, type Role, type Teacher, type User } from "../../types/user";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
 import type { GridRowModel } from "@mui/x-data-grid";
-import { assignRoleToUser } from "../../services/user.services";
+import { assignRoleToUser, updateTeacherDescription } from "../../services/user.services";
 
 type PropsCourseList = {
   userList: User[];
@@ -16,22 +16,18 @@ function UserList(props: PropsCourseList) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   useEffect(() => {
     setRows(
-      props.userList.map((user) => {
-        const baseRow = {
-          id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          dateOfBirth: user.dateOfBirth,
-          email: user.email,
-          dni: user.dni,
-          mobileNumber: user.mobileNumber,
-          profileImageUrl: user.profileImageUrl,
-        };
-        if (role === "Admin") {
-          return { ...baseRow, role: user.role };
-        }
-        return baseRow;
-      })
+      props.userList.map((user) => ({
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        email: user.email,
+        dni: user.dni,
+        mobileNumber: user.mobileNumber,
+        profileImageUrl: user.profileImageUrl,
+        role: user.role,
+        description: (user as Teacher).teacherProfile?.description ?? undefined,
+      }))
     );
   }, [props.userList, role]);
 
@@ -62,9 +58,9 @@ function UserList(props: PropsCourseList) {
         return "default";
     }
   };
-  const adminColumns: GridColDef[] = [
-    ...baseColumns,
-    {
+  const extraColumns: GridColDef[] = [];
+  if (role === "Admin") {
+    extraColumns.push({
       field: "role",
       headerName: "Role",
       type: "singleSelect",
@@ -73,14 +69,23 @@ function UserList(props: PropsCourseList) {
       renderCell: (params) => (
         <Chip label={params.value} color={colorBadge(params.value)} variant={params.value === "Student" ? "outlined" : "filled"} />
       ),
-    },
-  ];
+    });
+  }
+  if (role === "Admin" || role === "Teacher") {
+    extraColumns.push({ field: "description", headerName: "Description", editable: true, flex: 1 });
+  }
 
-  const columns = role === "Admin" ? adminColumns : baseColumns;
+  const columns = [...baseColumns, ...extraColumns];
 
-  const processRowUpdate = async (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
+    const changeFields = Object.keys(newRow).filter(field => newRow[field] !== oldRow[field]);
     try {
-      await assignRoleToUser(newRow.id, newRow.role);
+      if (changeFields.includes("role")) {
+        await assignRoleToUser(newRow.id, newRow.role);
+      }
+      if (changeFields.includes("description") && newRow.role === "Teacher") {
+        await updateTeacherDescription(newRow.id, newRow.description);
+      }
     } catch (error) {
       console.log(error);
     }

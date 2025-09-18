@@ -36,7 +36,9 @@ export const initialUser: UserFormData = {
 };
 
 export interface Teacher extends User {
-  description: string,
-  previousCourses: Course[],
-  activeCourses: Course[]
+  teacherProfile: {
+    description: string,
+    previousCourses: Course[],
+    activeCourses: Course[]
+  }
 }

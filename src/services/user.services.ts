@@ -11,9 +11,12 @@ function transformResponseToUser(data: User): User {
 function transformResponseToTeacher(data: Teacher): Teacher {
   return {
     ...transformResponseToUser(data),
-    description: data.description,
-    previousCourses: data.previousCourses,
-    activeCourses: data.activeCourses,
+    teacherProfile: {
+      description: data.teacherProfile.description,
+      previousCourses: data.teacherProfile.previousCourses,
+      activeCourses: data.teacherProfile.activeCourses,
+    }
+    
   };
 }
 
@@ -59,8 +62,8 @@ export const getAllTeachers = async (): Promise<Teacher[]> => {
   return transformResponseToTeachers(response.data);
 };
 
-export const setUserAsTeacher = async (userId: string, teacherData: Partial<Teacher>): Promise<User> => {
-  const response = await service.patch(`/user/teachers/${userId}`, teacherData);
+export const updateTeacherDescription = async (userId: string, teacherDescription: Partial<Teacher>): Promise<User> => {
+  const response = await service.patch(`/user/teachers/${userId}`, { teacherProfile: { description: teacherDescription } });
   return transformResponseToUser(response.data);
 };
 

@@ -18,7 +18,7 @@ function SignInCard() {
       const response = await loginUser(formData);
       localStorage.setItem("authToken", response.authToken);
       await authenticateUser();
-      navigate("/");
+      navigate("/my-courses");
     } catch (error) {
       console.error("Error login: ", error);
     }
