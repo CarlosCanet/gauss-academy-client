@@ -9,7 +9,12 @@ function transformResponseToUser(data: User): User {
 }
 
 function transformResponseToTeacher(data: Teacher): Teacher {
-  return { ...transformResponseToUser(data), description: data.description, previousCourses: data.previousCourses, activeCourses: data.activeCourses };
+  return {
+    ...transformResponseToUser(data),
+    description: data.description,
+    previousCourses: data.previousCourses,
+    activeCourses: data.activeCourses,
+  };
 }
 
 function transformResponseToUsers(data: User[]): User[] {
@@ -79,8 +84,8 @@ export const editProfile = async (userData: UserFormData): Promise<User> => {
   return response.data;
 };
 
-export const assignRoleToUser = async (role: Role): Promise<User> => {
-  const response = await service.patch(`/user/profile`, { role });
+export const assignRoleToUser = async (userId: string, newRole: Role): Promise<User> => {
+  const response = await service.patch(`/user/${userId}/role/${newRole}`);
   return response.data;
 };
 
@@ -100,7 +105,6 @@ export const verifyUser = async (): Promise<User> => {
 };
 
 export const uploadImage = async (uploadData: FormData): Promise<string> => {
-  const response = await service.post("/upload", uploadData)
+  const response = await service.post("/upload", uploadData);
   return response.data.imageUrl;
-}
-
+};

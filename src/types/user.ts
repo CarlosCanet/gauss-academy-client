@@ -1,6 +1,7 @@
 import type { Course } from "./types";
 
 export type Role = "Student" | "Teacher" | "Staff" | "Admin";
+export const ROLE_TYPES: Role[] = ["Student", "Teacher", "Staff", "Admin"];
 
 export interface UserCredentials {
   email: string,

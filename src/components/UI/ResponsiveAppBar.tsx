@@ -20,7 +20,7 @@ import { useNavigate, Link } from "react-router";
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const { username, profileImgUrl, isLoggedIn, authenticateUser } = useContext(AuthContext);
+  const { username, profileImgUrl, isLoggedIn, authenticateUser, role } = useContext(AuthContext);
   const navigate = useNavigate();
   
   
@@ -51,7 +51,10 @@ function ResponsiveAppBar() {
   };
   
   const pages = ["Courses", "Teachers", "Methodology", "Contact"];
-  const settings = [{ name: "Profile", path: "/profile" }, { name: "My Courses", path: "/my-courses" }, { name: "Dashboard", path: "" }, { name: "Logout", action: handleLogout }];
+  const settings = [{ name: "Profile", path: "/profile" }, { name: "My Courses", path: "/my-courses" }, { name: "Logout", action: handleLogout }];
+  if (role === "Admin") {
+    settings.splice(2, 0, { name: "User list", path: "/users" });
+  }
 
   return (
     <AppBar position="static">

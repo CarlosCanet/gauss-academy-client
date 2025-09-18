@@ -45,7 +45,7 @@ function App() {
         {/* <Route path="/enrollment/:enrollmentId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} /> */}
 
         {/* ADMIN ROUTES */}
-        <Route path="/users/" element={<OnlyAdmin><UserListPage /></OnlyAdmin>} />
+        <Route path="/users" element={<OnlyAdmin><UserListPage /></OnlyAdmin>} />
         
 
         <Route path="*" element={<NotFoundPage />} />

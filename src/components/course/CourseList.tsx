@@ -26,8 +26,8 @@ function CourseList(props: PropsCourseList) {
     const enrollmentData: EnrollmentFormData = {
       course: params.row.id,
       student: loggedUserId as string,
-      endDate: ""
-    }
+      endDate: "",
+    };
     try {
       const newEnrollment = await createEnrollment(params.row.id, enrollmentData);
       await createNewPayment(newEnrollment._id);
@@ -35,7 +35,7 @@ function CourseList(props: PropsCourseList) {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   // const handleCancelEnrollment = async (params: GridRowParams) => {
   //   try {
@@ -57,10 +57,6 @@ function CourseList(props: PropsCourseList) {
       headerName: "Classes",
       sortable: false,
       renderCell: (params) => (
-        // <Button variant="contained" onClick={() => navigate(`/course/${params.row.id}/classes`)}>
-        //   Classes
-        // </Button>
-
         <GridActionsCellItem icon={<SchoolIcon />} label="Classes" onClick={() => navigate(`/course/${params.row.id}/classes`)} />
       ),
     },
@@ -75,9 +71,9 @@ function CourseList(props: PropsCourseList) {
         sortable: false,
         type: "actions",
         getActions: (params) => {
-          return [<GridActionsCellItem icon={<EditIcon />} label="Enroll" onClick={()=>handleCreateEnrollment(params)} />];
-        }
-      })
+          return [<GridActionsCellItem icon={<EditIcon />} label="Enroll" onClick={() => handleCreateEnrollment(params)} />];
+        },
+      });
     }
   } else {
     columns.push({
