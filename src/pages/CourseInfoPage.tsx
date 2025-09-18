@@ -4,6 +4,8 @@ import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { editCourse, getCourse, transformCourseToForm } from "../services/course.services";
+import LoadingGauss from "../components/UI/LoadingGauss";
+
 
 function CourseInfoPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -40,7 +42,7 @@ function CourseInfoPage() {
 
   return (
     <div>
-      <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData}/>
+      {!formData ? <LoadingGauss /> : <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData}/>}
     </div>
   );
 }

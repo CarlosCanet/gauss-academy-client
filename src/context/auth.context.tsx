@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { Role } from "../types/user";
 import { getMyProfile, verifyUser } from "../services/user.services";
+import LoadingGauss from "../components/UI/LoadingGauss";
 
 // Context component (that sends the state contexts and functions)
 type AuthContextType = {
@@ -56,7 +57,7 @@ function AuthWrapper(props: { children: ReactNode }) {
   const passedContext = { ...userContext, authenticateUser };
 
   if (userContext.isAuthenticating) {
-    return <h3>Authenticating user...</h3>;
+    return <LoadingGauss />;
   }
 
   return <AuthContext.Provider value={passedContext}>{props.children}</AuthContext.Provider>;

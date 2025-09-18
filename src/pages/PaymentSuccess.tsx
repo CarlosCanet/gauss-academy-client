@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 
 import axios from "axios";
+import LoadingGauss from "../components/UI/LoadingGauss";
 
 const PaymentSuccess = () => {
-
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const [isFetching, setIsFetching] = useState(true);
 
@@ -17,23 +17,18 @@ const PaymentSuccess = () => {
   }, []);
 
   const handleUseEffect = async () => {
-
     // below is a way to extract queries from the search queries.
     // unfortunately, react-router-dom doesn't come with a proper way to extract them, similar to useParams
-    const clientSecret = new URLSearchParams(location.search).get(
-      "payment_intent_client_secret"
-    );
-    const paymentIntentId = new URLSearchParams(location.search).get(
-      "payment_intent"
-    );
+    const clientSecret = new URLSearchParams(location.search).get("payment_intent_client_secret");
+    const paymentIntentId = new URLSearchParams(location.search).get("payment_intent");
 
     const paymentIntentInfo = {
       clientSecret: clientSecret,
-      paymentIntentId: paymentIntentId
-    }
+      paymentIntentId: paymentIntentId,
+    };
 
     try {
-      await axios.patch("http://localhost:5005/api/payment/update-payment-intent", paymentIntentInfo)
+      await axios.patch("http://localhost:5005/api/payment/update-payment-intent", paymentIntentInfo);
       // !IMPORTANT: Adapt the request structure to the one in your project (services, .env, auth, etc...)
 
       setIsFetching(false);
@@ -48,10 +43,14 @@ const PaymentSuccess = () => {
 
   return (
     <div>
-      <div>
-        <h1>Thank you for your order!</h1>
-        <Link to={"/"}>Go back to Home</Link>
-      </div>
+      {isFetching ? (
+        <LoadingGauss />
+      ) : (
+        <div>
+          <h1>Thank you for your order!</h1>
+          <Link to={"/"}>Go back to Home</Link>
+        </div>
+      )}
     </div>
   );
 };

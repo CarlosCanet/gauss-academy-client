@@ -44,14 +44,14 @@ function ContactPage() {
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 5 }}>
-          <Card elevation={0} sx={{ height: "100%", bgcolor: "background.default" }}>
+          <Card elevation={0} sx={{ height: "100%" }}>
             <CardContent>
-              <Typography variant="h4" gutterBottom>
+              <Typography variant="h4" gutterBottom >
                 Get in Touch
               </Typography>
 
               <Box sx={{ mt: 4 }}>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 3, }}>
                   <LocationOnIcon sx={{ mr: 2, color: "primary.main" }} />
                   <Box>
                     <Typography variant="subtitle1" fontWeight="bold">

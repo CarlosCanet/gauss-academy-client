@@ -5,6 +5,7 @@ import { AuthContext } from "../context/auth.context";
 import { Button } from "@mui/material";
 import { deleteCourse, getAllActiveCourses, getAllCourses } from "../services/course.services";
 import { getMyEnrollments } from "../services/enrollment.services";
+import LoadingGauss from "../components/UI/LoadingGauss";
 
 function MyCoursesPage() {
   const [myCourses, setMyCourses] = useState<Course[]>([]);
@@ -12,7 +13,7 @@ function MyCoursesPage() {
   const { role } = useContext(AuthContext);
   useEffect(() => {
     getData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getData = async () => {
@@ -38,22 +39,33 @@ function MyCoursesPage() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div>
-      {role === "Student" && (
-        <>
-          <CourseList titleList="My courses" courseList={myCourses} onDelete={onDeleteCourse} />
-          <CourseList titleList="Other courses" courseList={activeCourses.filter(course => myCourses.every(myCourse => myCourse._id !== course._id))} />
-        </>
-      )}
-      {role === "Admin" && (
-        <>
-          <CourseList titleList="Active courses" courseList={activeCourses} onDelete={onDeleteCourse} />
-          <Button href="/course/newCourse" variant="contained">Create new course</Button>
-        </>
-      )}
+      {role === "Student" &&
+        (myCourses.length === 0 ? (
+          <LoadingGauss />
+        ) : (
+          <>
+            <CourseList titleList="My courses" courseList={myCourses} onDelete={onDeleteCourse} />
+            <CourseList
+              titleList="Other courses"
+              courseList={activeCourses.filter((course) => myCourses.every((myCourse) => myCourse._id !== course._id))}
+            />
+          </>
+        ))}
+      {role === "Admin" &&
+        (activeCourses.length === 0 ? (
+          <LoadingGauss />
+        ) : (
+          <>
+            <CourseList titleList="Active courses" courseList={activeCourses} onDelete={onDeleteCourse} />
+            <Button href="/course/newCourse" variant="contained">
+              Create new course
+            </Button>
+          </>
+        ))}
     </div>
   );
 }

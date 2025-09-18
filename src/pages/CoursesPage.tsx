@@ -1,9 +1,10 @@
 // import { useState } from "react";
 
-import { List, ListItem, ListItemText, Typography } from "@mui/material"
-import { useEffect, useState } from "react"
+import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import type { Course } from "../types/types";
 import { getPublicInfoFromAllActiveCourses } from "../services/course.services";
+import LoadingGauss from "../components/UI/LoadingGauss";
 
 function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -18,21 +19,27 @@ function CoursesPage() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div>
-      <Typography variant="h3" gutterBottom align="center">Courses</Typography>
-      <List>
-        {courses.map(course => {
-          return (
-            <ListItem key={course._id}>
-              <ListItemText primary={course.name} />
-            </ListItem>
-          );
-         })}
-      </List>
+      <Typography variant="h3" gutterBottom align="center">
+        Courses
+      </Typography>
+      {courses.length === 0 ? (
+        <LoadingGauss />
+      ) : (
+        <List>
+          {courses.map((course) => {
+            return (
+              <ListItem key={course._id}>
+                <ListItemText primary={course.name} />
+              </ListItem>
+            );
+          })}
+        </List>
+      )}
     </div>
-  )
+  );
 }
-export default CoursesPage
+export default CoursesPage;
