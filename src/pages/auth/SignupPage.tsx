@@ -1,10 +1,20 @@
 import { Stack } from "@mui/material";
 import SignUpCard from "../../components/auth/SignUpCard";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth.context";
+import { Navigate } from "react-router";
 
 function SignupPage() {
+  const { isLoggedIn } = useContext(AuthContext);
+
+  if (isLoggedIn) {
+    return <Navigate to={"/profile"} />;
+  }
 
   return (
-    <Stack direction="column" component="main"
+    <Stack
+      direction="column"
+      component="main"
       sx={[
         {
           justifyContent: "center",

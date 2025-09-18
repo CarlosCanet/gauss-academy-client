@@ -1,7 +1,15 @@
 import { Stack } from "@mui/material";
 import SignInCard from "../../components/auth/SignInCard";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth.context";
+import { Navigate } from "react-router";
 
 function LoginPage() {
+  const { isLoggedIn } = useContext(AuthContext);
+  
+  if (isLoggedIn) {
+    return <Navigate to={"/profile"} />
+  }
 
   return (
     <Stack direction="column" component="main"
