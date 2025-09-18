@@ -19,7 +19,7 @@ function MyCoursesPage() {
     try {
       if (role === "Admin") {
         const courses = await getAllCourses();
-        setMyCourses(courses);
+        setActiveCourses(courses);
         return;
       }
       const enrollments = await getMyEnrollments();

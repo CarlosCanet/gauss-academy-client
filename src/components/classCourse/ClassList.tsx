@@ -17,9 +17,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { GridRowId, GridRowModel } from "@mui/x-data-grid";
 import { createClass, deleteClass, editClass, getClassesFromCourse } from "../../services/class.services";
+import { AuthContext } from "../../context/auth.context";
 
 type PropsClassList = {
   courseId: string;
@@ -28,6 +29,32 @@ type PropsClassList = {
 function ClassList(props: PropsClassList) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const { role } = useContext(AuthContext);
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getData = async () => {
+    try {
+      const data = await getClassesFromCourse(props.courseId);
+      setRows(
+        data.map((oneClass) => ({
+          id: oneClass._id,
+          course_id: typeof oneClass.course === "object" ? oneClass.course._id : oneClass.course,
+          course: typeof oneClass.course === "object" ? oneClass.course.name : oneClass.course,
+          numberOfHours: oneClass.numberOfHours,
+          date: oneClass.date,
+          classType: oneClass.classType,
+          onlineUrl: oneClass.onlineUrl,
+          classroomName: oneClass.classroomName,
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const columns: GridColDef[] = [
     { field: "course", headerName: "Course Name", type: "string", editable: true },
     { field: "numberOfHours", headerName: "Hours", type: "number", editable: true },
@@ -35,7 +62,10 @@ function ClassList(props: PropsClassList) {
     { field: "classType", headerName: "Type", type: "singleSelect", valueOptions: CLASS_TYPES, editable: true },
     { field: "onlineUrl", headerName: "URL", type: "string", editable: true },
     { field: "classroomName", headerName: "Classroom name", type: "string", editable: true },
-    {
+  ];
+  
+  if (role !== "Student") {
+    columns.push({
       field: "actions",
       headerName: "Acciones",
       type: "actions",
@@ -65,32 +95,8 @@ function ClassList(props: PropsClassList) {
           <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} color="inherit" />,
         ];
       },
-    },
-  ];
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getData = async () => {
-    try {
-      const data = await getClassesFromCourse(props.courseId);
-      setRows(
-        data.map((oneClass) => ({
-          id: oneClass._id,
-          course_id: typeof oneClass.course === "object" ? oneClass.course._id : oneClass.course,
-          course: typeof oneClass.course === "object" ? oneClass.course.name : oneClass.course,
-          numberOfHours: oneClass.numberOfHours,
-          date: oneClass.date,
-          classType: oneClass.classType,
-          onlineUrl: oneClass.onlineUrl,
-          classroomName: oneClass.classroomName,
-        }))
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    });
+  }
 
   // Action handlers
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (params, event) => {
@@ -182,7 +188,7 @@ function ClassList(props: PropsClassList) {
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
           slots={{ toolbar: CustomToolbar }}
-          showToolbar
+          showToolbar={role !== "Student"}
         />
       </div>
     </div>
