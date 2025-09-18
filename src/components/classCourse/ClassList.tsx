@@ -172,7 +172,7 @@ function ClassList(props: PropsClassList) {
       <Typography variant="h3" align="center">
         {rows.length > 0 && rows[0].course ? `Classes for ${rows[0].course}` : "Classes"}
       </Typography>
-      <div style={{ height: 300, width: "100%" }}>
+      <div style={{ width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}

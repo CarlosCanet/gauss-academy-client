@@ -15,14 +15,12 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate, Link } from "react-router";
-import { Cloudinary } from "@cloudinary/url-gen";
-import { fill } from "@cloudinary/url-gen/actions/resize";
 
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const { isLoggedIn, authenticateUser } = useContext(AuthContext);
+  const { username, profileImgUrl, isLoggedIn, authenticateUser } = useContext(AuthContext);
   const navigate = useNavigate();
   
   
@@ -54,9 +52,6 @@ function ResponsiveAppBar() {
   
   const pages = ["Courses", "Teachers", "Methodology", "Contact"];
   const settings = [{ name: "Profile", path: "/profile" }, { name: "My Courses", path: "/my-courses" }, { name: "Dashboard", path: "" }, { name: "Logout", action: handleLogout }];
-  
-  const cloud = new Cloudinary({ cloud: { cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME } });
-  const profileImg = cloud.image("samples/smile").resize(fill().width(250).height(250));
 
   return (
     <AppBar position="static">
@@ -136,7 +131,8 @@ function ResponsiveAppBar() {
               <>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={`User image profile`} src={profileImg.toURL()} />
+                    <Typography sx={{mr: "5px"}} color="white">{username}</Typography>
+                    <Avatar alt={`User image profile`} src={profileImgUrl ?? ""} />
                   </IconButton>
                 </Tooltip>
                 <Menu

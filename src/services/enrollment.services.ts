@@ -1,10 +1,15 @@
 import type { Enrollment, EnrollmentFormData } from "../types/types";
 import { dateToString } from "../utils/date";
 import { service } from "./config.services";
+import { transformResponseToCourse } from "./course.services";
 
 // Transform functions
 function transformResponseToEnrollment(data: Enrollment): Enrollment {
-  return { ...data, endDate: new Date(data.endDate) };
+  if (typeof data.course === "string") {
+    return { ...data, endDate: new Date(data.endDate) };
+  } else {
+    return { ...data, endDate: new Date(data.endDate), course: transformResponseToCourse(data.course) };
+  }
 }
 
 function transformResponseToEnrollments(data: Enrollment[]): Enrollment[] {

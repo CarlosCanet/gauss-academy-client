@@ -3,7 +3,7 @@ import type { Course, CourseFormData } from "../types/types";
 import { dateToString } from "../utils/date";
 
 // Transform functions
-function transformResponseToCourse(data: Course): Course {
+export function transformResponseToCourse(data: Course): Course {
   return { ...data, startDate: new Date(data.startDate), endDate: new Date(data.endDate) };
 }
 

@@ -8,6 +8,6 @@ type OnlyRegisteredProps = {
 
 function OnlyAdmin(props: OnlyRegisteredProps) {
   const { isLoggedIn, role } = useContext(AuthContext);
-  return (isLoggedIn && role === "Admin") ? props.children : <Navigate to="/login" />
+  return (isLoggedIn && role === "Admin") ? props.children : <Navigate to="/profile" />
 }
 export default OnlyAdmin;

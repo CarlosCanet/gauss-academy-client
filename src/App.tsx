@@ -15,6 +15,8 @@ import ContactPage from "./pages/ContactPage";
 import CourseNewPage from "./pages/CourseNewPage";
 import OnlyAdmin from "./components/auth/OnlyAdmin";
 import CourseClassListPage from "./pages/CourseClassListPage";
+import UserListPage from "./pages/UserListPage";
+import CheckoutPage from "./pages/CheckoutPage";
 
 function App() {
 
@@ -38,9 +40,13 @@ function App() {
         <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
         <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>} />
         <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>} />
+        <Route path="/checkout" element={<OnlyRegistered><CheckoutPage /></OnlyRegistered>} />
         
         {/* <Route path="/enrollment/:enrollmentId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} /> */}
 
+        {/* ADMIN ROUTES */}
+        <Route path="/users/" element={<OnlyAdmin><UserListPage /></OnlyAdmin>} />
+        
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

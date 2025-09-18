@@ -4,12 +4,16 @@ import type { UserFormData } from "../types/user";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 import { editProfile } from "../services/user.services";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth.context";
 
 function ProfilePage() {
   const navigate = useNavigate();
+  const { authenticateUser } = useContext(AuthContext);
   const handleSubmit = async (formData: UserFormData) => {
     try {
       await editProfile(formData);
+      await authenticateUser();
       navigate("/login");
       return null;
     } catch (error) {

@@ -99,10 +99,8 @@ export const verifyUser = async (): Promise<User> => {
   return response.data;
 };
 
-
-
-// export const endUser = async (courseId: string, studentId: string, endDate: string): Promise<User> => {
-//   const response = await service.patch(`/user/${courseId}/${studentId}`, { endDate: new Date(endDate) });
-//   return response.data;
-// };
+export const uploadImage = async (uploadData: FormData): Promise<string> => {
+  const response = await service.post("/upload", uploadData)
+  return response.data.imageUrl;
+}
 

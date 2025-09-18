@@ -1,19 +1,41 @@
 import { Box, Button, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { initialUser, type UserFormData, type UserFormErrors } from "../../types/user";
-import { getMyProfile, transformUserToForm } from "../../services/user.services";
+import { getMyProfile, transformUserToForm, uploadImage } from "../../services/user.services";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 type PropsUserInfo = {
   handleSubmit: (formData: UserFormData) => Promise<UserFormErrors | null>;
   actionText: string;
 };
 
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+interface FileInfo {
+  file: File | null;
+  previewURL: string;
+}
+
 function UserInfoForm(props: PropsUserInfo) {
   const [formData, setFormData] = useState<UserFormData>(initialUser);
   const [formErrors, setFormErrors] = useState<UserFormErrors>({});
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [fileInfo, setFileInfo] = useState<FileInfo>({ file: null, previewURL: "" });
 
   useEffect(() => {
     getData();
+    return () => URL.revokeObjectURL(fileInfo.previewURL);
   }, []);
 
   const getData = async () => {
@@ -25,12 +47,37 @@ function UserInfoForm(props: PropsUserInfo) {
     }
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => setFormData((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
+  const onUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !event.target.files[0]) {
+      return;
+    }
+    if (fileInfo.previewURL) {
+      URL.revokeObjectURL(fileInfo.previewURL);
+    }
+    setFileInfo({ file: event.target.files[0], previewURL: URL.createObjectURL(event.target.files[0]) });
+  };
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const errors = await props.handleSubmit(formData);
-    if (errors) {
-      setFormErrors(errors);
+    let newFormData = { ...formData };
+    try {
+      if (fileInfo.file) {
+        setIsUploading(true);
+        const uploadData = new FormData();
+        uploadData.append("image", fileInfo.file);
+        console.log("Uploading");
+        const cloudinaryImageUrl = await uploadImage(uploadData);
+        setIsUploading(false);
+        newFormData = { ...newFormData, profileImageUrl: cloudinaryImageUrl };
+        setFormData(newFormData);
+      }
+      const errors = await props.handleSubmit(newFormData);
+      if (errors) {
+        setFormErrors(errors);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -52,7 +99,17 @@ function UserInfoForm(props: PropsUserInfo) {
         variant="outlined"
         // color={formErrors.email ? "primary" : "error"}
       />
-      <TextField name="password" type="password" label="Password" autoComplete="new-password" value={formData.password} onChange={onChange} required fullWidth variant="outlined" />
+      <TextField
+        name="password"
+        type="password"
+        label="Password"
+        autoComplete="new-password"
+        value={formData.password}
+        onChange={onChange}
+        required
+        fullWidth
+        variant="outlined"
+      />
       <TextField
         error={Boolean(formErrors.firstName)}
         helperText={formErrors.firstName}
@@ -96,7 +153,20 @@ function UserInfoForm(props: PropsUserInfo) {
         variant="outlined"
         slotProps={{ inputLabel: { shrink: true } }}
       />
-      <TextField error={Boolean(formErrors.dni)} helperText={formErrors.dni} type="text" name="dni" value={formData.dni} onChange={onChange} placeholder="DNI or NIE" label="DNI or NIE" autoComplete="on" required fullWidth variant="outlined" />
+      <TextField
+        error={Boolean(formErrors.dni)}
+        helperText={formErrors.dni}
+        type="text"
+        name="dni"
+        value={formData.dni}
+        onChange={onChange}
+        placeholder="DNI or NIE"
+        label="DNI or NIE"
+        autoComplete="on"
+        required
+        fullWidth
+        variant="outlined"
+      />
       <TextField
         error={Boolean(formErrors.mobileNumber)}
         helperText={formErrors.mobileNumber}
@@ -111,7 +181,7 @@ function UserInfoForm(props: PropsUserInfo) {
         fullWidth
         variant="outlined"
       />
-      <TextField
+      {/* <TextField
         error={Boolean(formErrors.profileImageUrl)}
         helperText={formErrors.profileImageUrl}
         type="text"
@@ -124,7 +194,13 @@ function UserInfoForm(props: PropsUserInfo) {
         required
         fullWidth
         variant="outlined"
-      />
+      /> */}
+      {/* {formData.profileImageUrl && <img src={formData.profileImageUrl} alt="Uploaded image" height="200 px"/>} */}
+      {fileInfo.previewURL !== "" && <img src={fileInfo.previewURL} alt="Uploaded image" height="200 px" />}
+      <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />} loading={isUploading}>
+        Upload image
+        <VisuallyHiddenInput type="file" onChange={onUpload} multiple />
+      </Button>
 
       <Button type="submit" fullWidth variant="contained">
         {props.actionText}

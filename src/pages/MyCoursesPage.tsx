@@ -42,10 +42,17 @@ function MyCoursesPage() {
 
   return (
     <div>
-      <CourseList titleList="My courses" courseList={myCourses} onDelete={onDeleteCourse} />
-      <CourseList titleList="Other courses" courseList={activeCourses.filter(course => myCourses.some(myCourse => myCourse._id !== course._id))} />
+      {role === "Student" && (
+        <>
+          <CourseList titleList="My courses" courseList={myCourses} onDelete={onDeleteCourse} />
+          <CourseList titleList="Other courses" courseList={activeCourses.filter(course => myCourses.every(myCourse => myCourse._id !== course._id))} />
+        </>
+      )}
       {role === "Admin" && (
+        <>
+          <CourseList titleList="Active courses" courseList={activeCourses} onDelete={onDeleteCourse} />
           <Button href="/course/newCourse" variant="contained">Create new course</Button>
+        </>
       )}
     </div>
   );

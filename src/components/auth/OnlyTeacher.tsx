@@ -8,6 +8,6 @@ type OnlyRegisteredProps = {
 
 function OnlyTeacher(props: OnlyRegisteredProps) {
   const { isLoggedIn, role } = useContext(AuthContext);
-  return (isLoggedIn && role === "Teacher") ? props.children : <Navigate to="/login" />
+  return (isLoggedIn && role === "Teacher") ? props.children : <Navigate to="/profile" />
 }
 export default OnlyTeacher;
