@@ -35,7 +35,6 @@ function App() {
         
         {/* PRIVATE ROUTES */}
         <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
-        <Route path="/profile/admin" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
         <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>} />
         <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
         <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>} />

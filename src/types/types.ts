@@ -99,3 +99,11 @@ export const initialPayment: Payment = {
   clientSecret: "",
   price: 0,
 };
+
+export interface ContactEmail {
+  name: string,
+  email: string,
+  subject: string,
+  message: string
+}
+export const initialEmail: ContactEmail = { name: "", email: "", subject: "", message: "" };
