@@ -45,8 +45,10 @@ function UserInfoForm(props: PropsUserInfo) {
 
   const getData = async () => {
     try {
-      const userData = await getMyProfile();
-      setFormData(transformUserToForm(userData));
+      if (isLoggedIn) {
+        const userData = await getMyProfile();
+        setFormData(transformUserToForm(userData));
+      }
     } catch (error) {
       console.error(error);
       setShowErrorAlert(true);

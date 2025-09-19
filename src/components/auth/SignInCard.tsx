@@ -7,7 +7,7 @@ import { loginUser } from "../../services/user.services";
 
 function SignInCard() {
   const [formData, setFormData] = useState<UserCredentials>({ email: "", password: "" });
-  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
+  const [showErrorAlert, setShowAlert] = useState<boolean>(false);
   const { authenticateUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,17 +22,17 @@ function SignInCard() {
       navigate("/my-courses");
     } catch (error) {
       console.error("Error login: ", error);
-      setShowErrorAlert(true);
+      setShowAlert(true);
     }
   };
 
   return (
-    <Card variant="outlined" sx={{ padding: "25px" }}>
+    <Card variant="outlined" sx={{ display: "flex", flexDirection: "column", p: {xs: 4, md: 5}}}>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>Gauss Academy</Box>
-      <Typography component="h1" variant="h4" sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}>
+      <Typography component="h1" variant="h4" sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)", mb: 3 }}>
         Sign in
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 3 }}>
         <TextField
           error={false}
           // helperText="error"

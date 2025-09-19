@@ -31,9 +31,9 @@ function SignUpCard() {
   };
 
   return (
-    <Card variant="outlined" sx={{ padding: "25px" }}>
+    <Card variant="outlined" sx={{ padding: "30px" }}>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>Gauss Academy</Box>
-      <Typography component="h1" variant="h4" sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}>
+      <Typography component="h1" variant="h4" sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)", mb: 3 }}>
         Sign up
       </Typography>
       <UserInfoForm handleSubmit={handleSubmit} actionText="Sign up" />
