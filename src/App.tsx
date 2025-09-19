@@ -20,6 +20,8 @@ import CheckoutPage from "./pages/CheckoutPage";
 import AdminDrawer from "./components/user/AdminDrawer";
 import { useContext, useState } from "react";
 import { AuthContext } from "./context/auth.context";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   const { role } = useContext(AuthContext);
@@ -48,12 +50,14 @@ function App() {
         <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>}/>
         <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>}/>
         <Route path="/checkout" element={<OnlyRegistered><CheckoutPage /></OnlyRegistered>}/>
+        <Route path="/payment-success" element={<OnlyRegistered><PaymentSuccessPage /></OnlyRegistered>}/>
 
         {/* ADMIN ROUTES */}
         <Route path="/users" element={<OnlyAdmin><UserListPage /></OnlyAdmin>}/>
 
         {/* ERROR ROUTES */}
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </>
   );

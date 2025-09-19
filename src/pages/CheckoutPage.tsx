@@ -55,7 +55,7 @@ function CheckoutPage() {
       ) : null}
       {showErrorAlert && (
         <Alert severity="error" sx={{ my: 2 }}>
-          There was an error with the login. Please try again.
+          There was an error loading your pending payments. Please refresh or try again later.
         </Alert>
       )}
     </Container>

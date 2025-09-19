@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
-
-import axios from "axios";
 import LoadingGauss from "../components/UI/LoadingGauss";
+import { updatePayment } from "../services/payment.services";
 
-const PaymentSuccess = () => {
+const PaymentSuccessPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {
     handleUseEffect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUseEffect = async () => {
@@ -22,37 +21,25 @@ const PaymentSuccess = () => {
     const clientSecret = new URLSearchParams(location.search).get("payment_intent_client_secret");
     const paymentIntentId = new URLSearchParams(location.search).get("payment_intent");
 
-    const paymentIntentInfo = {
-      clientSecret: clientSecret,
-      paymentIntentId: paymentIntentId,
-    };
-
     try {
-      await axios.patch("http://localhost:5005/api/payment/update-payment-intent", paymentIntentInfo);
-      // !IMPORTANT: Adapt the request structure to the one in your project (services, .env, auth, etc...)
-
+      await updatePayment(clientSecret as string, paymentIntentId as string);
       setIsFetching(false);
     } catch (error) {
+      console.error(error);
       navigate("/error");
     }
   };
 
   if (isFetching) {
-    return <h3>... updating payment</h3>;
+    return <LoadingGauss />;
   }
 
   return (
     <div>
-      {isFetching ? (
-        <LoadingGauss />
-      ) : (
-        <div>
-          <h1>Thank you for your order!</h1>
-          <Link to={"/"}>Go back to Home</Link>
-        </div>
-      )}
+      <h1>Thank you for your order!</h1>
+      <Link to={"/"}>Go back to Home</Link>
     </div>
   );
 };
 
-export default PaymentSuccess;
+export default PaymentSuccessPage;

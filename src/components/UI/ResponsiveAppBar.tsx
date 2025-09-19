@@ -61,6 +61,7 @@ function ResponsiveAppBar({ onOpenAdminDrawer }: ResponsiveAppBarProps) {
   const settings = [
     { name: "Profile", path: "/profile" },
     { name: "My Courses", path: "/my-courses" },
+    { name: "Payments", path: "/checkout" },
     { name: "Toggle mode", action: () => setIsDarkTheme(prev => !prev) },
     { name: "Logout", action: handleLogout },
   ];
