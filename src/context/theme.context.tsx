@@ -23,11 +23,11 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const theme = createTheme({
     palette: {
       mode: isDarkTheme ? "dark" : "light",
-      // primary: {
-      //   light:"#f267A3",
-      //   dark: "#F2472F",
-      //   main: "#f267A3",
-      // }
+      primary: {
+        light:"#366c90",
+        dark: "#366cF0",
+        main: "#366c90",
+      }
     },
     components: {
       MuiLink: {

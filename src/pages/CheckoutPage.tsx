@@ -39,7 +39,7 @@ function CheckoutPage() {
           {isLoading ? (
             <LoadingGauss />
           ) : payments.length === 0 ? (
-            <Typography variant="h3">You have no pending payments</Typography>
+            <Typography variant="h5" sx={{px: 10, py: 3}}>You have no pending payments</Typography>
           ) : (
             <CardContent>
               <Typography variant="h4">{`Payment for ${course?.name ?? "course"}`}</Typography>

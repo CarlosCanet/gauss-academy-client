@@ -63,7 +63,7 @@ function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `${import.meta.env.VITE_CLIENT_URL}/Success`,
+        return_url: `${import.meta.env.VITE_CLIENT_URL}/payment-success`,
       },
     });
 
@@ -90,7 +90,7 @@ function CheckoutForm() {
   return (
     <Box component="form" id="payment-form" onSubmit={handleSubmit} sx={{ width: "80%", display: "flex", flexDirection: "column", gap: "50px"}}>
       <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <Button disabled={isLoading || !stripe || !elements} id="submit" variant="contained" sx={{alignSelf: "center", padding: "7px 40px"}} >
+      <Button disabled={isLoading || !stripe || !elements} id="submit" type="submit" variant="contained" sx={{alignSelf: "center", padding: "7px 40px"}} >
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
