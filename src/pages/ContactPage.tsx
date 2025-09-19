@@ -30,7 +30,7 @@ function ContactPage() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h2" align="center" gutterBottom>
         Contact Us
       </Typography>

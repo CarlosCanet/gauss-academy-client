@@ -6,9 +6,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import SchoolIcon from '@mui/icons-material/School';
+import DescriptionIcon from '@mui/icons-material/Description';
+import PersonIcon from '@mui/icons-material/Person';
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import { type SetStateAction } from "react";
+import { Link } from "react-router";
 
 type AdminDrawerProps = {
   isOpen: boolean,
@@ -27,22 +30,22 @@ function AdminDrawer({ isOpen, setIsOpen }: AdminDrawerProps) {
   const list = () => (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+        {[{name: "Active courses", path: "/my-courses", icon: <DescriptionIcon /> }, {name: "Active enrollments", path: "", icon: <TurnedInNotIcon />}, {name: "Classes", path: "", icon: <SchoolIcon />}].map((obj) => (
+          <ListItem key={obj.name} disablePadding>
+            <ListItemButton component={Link} to={obj.path}>
+              <ListItemIcon>{obj.icon}</ListItemIcon>
+              <ListItemText primary={obj.name} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+        {[{name: "All users", path: "/users", icon: <PersonIcon />}].map((obj) => (
+          <ListItem key={obj.name} disablePadding>
+            <ListItemButton component={Link} to={obj.path}>
+              <ListItemIcon>{obj.icon}</ListItemIcon>
+              <ListItemText primary={obj.name} />
             </ListItemButton>
           </ListItem>
         ))}

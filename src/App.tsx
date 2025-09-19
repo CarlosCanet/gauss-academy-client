@@ -23,14 +23,14 @@ import { AuthContext } from "./context/auth.context";
 
 function App() {
   const { role } = useContext(AuthContext);
-
-  // elevated admin drawer state so it can be controlled from the App level
   const [isAdminDrawerOpen, setIsAdminDrawerOpen] = useState(false);
 
   return (
     <>
-  <ResponsiveAppBar onOpenAdminDrawer={() => setIsAdminDrawerOpen(true)} />
-  {role === "Admin" && <AdminDrawer isOpen={isAdminDrawerOpen} setIsOpen={setIsAdminDrawerOpen} />}
+      <ResponsiveAppBar onOpenAdminDrawer={() => setIsAdminDrawerOpen(true)} />
+      <div style={{ height: 64 }} aria-hidden />
+
+      {role === "Admin" && <AdminDrawer isOpen={isAdminDrawerOpen} setIsOpen={setIsAdminDrawerOpen} />}
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<MainPage />} />
@@ -40,21 +40,19 @@ function App() {
         <Route path="/teachers" element={<TeachersPage />} />
         <Route path="/methodology" element={<MethodologyPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        
+
         {/* PRIVATE ROUTES */}
-        <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
-        <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>} />
-        <Route path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} />
-        <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>} />
-        <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>} />
-        <Route path="/checkout" element={<OnlyRegistered><CheckoutPage /></OnlyRegistered>} />
-        
-        {/* <Route path="/enrollment/:enrollmentId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>} /> */}
+        <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>}/>
+        <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>}/>
+        <Route  path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>}/>
+        <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>}/>
+        <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>}/>
+        <Route path="/checkout" element={<OnlyRegistered><CheckoutPage /></OnlyRegistered>}/>
 
         {/* ADMIN ROUTES */}
-        <Route path="/users" element={<OnlyAdmin><UserListPage /></OnlyAdmin>} />
-        
+        <Route path="/users" element={<OnlyAdmin><UserListPage /></OnlyAdmin>}/>
 
+        {/* ERROR ROUTES */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

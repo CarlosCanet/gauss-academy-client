@@ -14,7 +14,7 @@ export interface Course {
   slug: string;
   status: CourseStatus;
   imageUrl: string;
-  degreeNames: string;
+  degreeNames: string[];
   startDate: Date;
   endDate: Date;
   numberOfHours: string;
@@ -31,7 +31,7 @@ export const initialCourseForm: CourseFormData = {
   slug: "",
   status: "Planned",
   imageUrl: "",
-  degreeNames: "",
+  degreeNames: [],
   startDate: dateToString(new Date()),
   endDate: "",
   numberOfHours: "",
