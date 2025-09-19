@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import type { Course } from "../types/types";
 import CourseList from "../components/course/CourseList";
 import { AuthContext } from "../context/auth.context";
-import { Alert, Button } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import { deleteCourse, getAllActiveCourses, getAllCourses } from "../services/course.services";
 import { getMyEnrollments } from "../services/enrollment.services";
 import LoadingGauss from "../components/UI/LoadingGauss";
@@ -64,9 +64,11 @@ function MyCoursesPage() {
         ) : (
           <>
             <CourseList titleList="Active courses" courseList={activeCourses} onDelete={onDeleteCourse} />
-            <Button href="/course/newCourse" variant="contained">
-              Create new course
-            </Button>
+            <Box sx={{display: "flex", justifyContent:"end", mr: {xs: 2, md: 4}}}>
+              <Button href="/course/newCourse" variant="contained">
+                Create new course
+              </Button>
+            </Box>
           </>
         ))}
       {showErrorAlert && (

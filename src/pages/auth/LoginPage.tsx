@@ -8,7 +8,7 @@ function LoginPage() {
   const { isLoggedIn } = useContext(AuthContext);
   
   if (isLoggedIn) {
-    return <Navigate to={"/profile"} />
+    return <Navigate to={"/my-courses"} />
   }
 
   return (

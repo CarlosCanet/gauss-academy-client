@@ -4,7 +4,7 @@ import { initialCourseForm, type CourseFormData } from "../types/types";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router";
 import { createCourse } from "../services/course.services";
-import { Alert } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 
 function CourseNewPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -33,7 +33,10 @@ function CourseNewPage() {
 
   return (
     <div>
-      <CourseForm actionText="Create" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData} />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: { xs: 2, md: 4 }, }}>
+        <Typography variant="h4" textAlign="center">Create new course</Typography>
+        <CourseForm actionText="Create" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData} />
+      </Box>
       {showErrorAlert && (
         <Alert severity="error" sx={{ my: 2 }}>
           There was an error with the course. Please try again.

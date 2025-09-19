@@ -1,7 +1,8 @@
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
+import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { COURSE_STATUS, type CourseFormData, type CourseFormErrors } from "../../types/types";
 import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router";
 
 type PropsCourseForm = {
   handleSubmit: (formData: CourseFormData) => Promise<CourseFormErrors | null>;
@@ -14,6 +15,7 @@ function CourseForm(props: PropsCourseForm) {
   const { formData, setFormData } = props;
   const [formErrors, setFormErrors] = useState<CourseFormErrors>({});
   const { role } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setFormData((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
@@ -26,7 +28,7 @@ function CourseForm(props: PropsCourseForm) {
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit} noValidate sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}>
+    <Grid container component="form" onSubmit={onSubmit} noValidate sx={{ width: "100%", gap: 2 }} spacing={2}>
       <TextField
         error={Boolean(formErrors.name)}
         helperText={formErrors.name}
@@ -34,24 +36,14 @@ function CourseForm(props: PropsCourseForm) {
         name="name"
         value={formData.name}
         onChange={onChange}
-        label="name"
+        label="Course name"
         autoFocus
         required
         fullWidth
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
       />
-      <Autocomplete
-        options={COURSE_STATUS}
-        value={formData.status}
-        onChange={(_, newValue) => {
-          if (newValue === "Planned" || newValue === "Active" || newValue === "Finished") {
-            setFormData((prevState) => ({ ...prevState, status: newValue }));
-          }
-        }}
-        renderInput={(params) => <TextField {...params} label="Status" name="status" slotProps={{ input: { readOnly: role === "Student" } }} />}
-      />
-      <TextField
+      {/* <TextField
         error={Boolean(formErrors.imageUrl)}
         helperText={formErrors.imageUrl}
         type="text"
@@ -63,8 +55,10 @@ function CourseForm(props: PropsCourseForm) {
         fullWidth
         variant="outlined"
         slotProps={{ input: { readOnly: role === "Student" } }}
-      />
-      <TextField
+      /> */}
+      <Grid
+        size={6}
+        component={TextField}
         error={Boolean(formErrors.startDate)}
         helperText={formErrors.startDate}
         type="date"
@@ -79,7 +73,9 @@ function CourseForm(props: PropsCourseForm) {
         variant="outlined"
         slotProps={{ inputLabel: { shrink: true }, input: { readOnly: role === "Student" } }}
       />
-      <TextField
+      <Grid
+        size={6}
+        component={TextField}
         error={Boolean(formErrors.endDate)}
         helperText={formErrors.endDate}
         type="date"
@@ -93,7 +89,19 @@ function CourseForm(props: PropsCourseForm) {
         variant="outlined"
         slotProps={{ inputLabel: { shrink: true }, input: { readOnly: role === "Student" } }}
       />
-      <TextField
+      <Grid size={{xs: 4, md: 2}}>
+        <Select
+          value={formData.status}
+          fullWidth
+          onChange={(event) => {
+            setFormData((prevState) => ({ ...prevState, status: event.target.value }));
+          }}
+          readOnly={role === "Student"}
+        >
+          {COURSE_STATUS.map(status => (<MenuItem value={status}>{status}</MenuItem>))}
+        </Select>
+      </Grid>
+      <Grid size={{xs: 4, md: 4}} component={TextField}
         error={Boolean(formErrors.numberOfHours)}
         helperText={formErrors.numberOfHours}
         type="tel"
@@ -122,7 +130,7 @@ function CourseForm(props: PropsCourseForm) {
             slotProps={{ input: { readOnly: false } }}
           />
         ))} */}
-      <TextField
+      <Grid size={{xs: 4, md: 6}} component={TextField}
         error={Boolean(formErrors.price)}
         helperText={formErrors.price}
         type="text"
@@ -136,12 +144,17 @@ function CourseForm(props: PropsCourseForm) {
         slotProps={{ input: { readOnly: role === "Student" } }}
       />
 
-      {props.actionText && (
+      <Grid size={3} offset={3}>
         <Button type="submit" fullWidth variant="contained">
           {props.actionText}
         </Button>
-      )}
-    </Box>
+      </Grid>
+      <Grid size={3}>
+        <Button variant="outlined" fullWidth color="error" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 export default CourseForm;

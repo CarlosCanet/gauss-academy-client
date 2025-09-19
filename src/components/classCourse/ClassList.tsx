@@ -1,4 +1,4 @@
-import { Alert, Tooltip, Typography } from "@mui/material";
+import { Alert, Box, Button, Tooltip, Typography } from "@mui/material";
 import {
   DataGrid,
   Toolbar,
@@ -21,6 +21,7 @@ import { useContext, useEffect, useState } from "react";
 import type { GridRowId, GridRowModel } from "@mui/x-data-grid";
 import { createClass, deleteClass, editClass, getClassesFromCourse } from "../../services/class.services";
 import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router";
 
 type PropsClassList = {
   courseId: string;
@@ -31,6 +32,7 @@ function ClassList(props: PropsClassList) {
   const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const { role } = useContext(AuthContext);
+  const navigate = useNavigate();
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,12 +60,27 @@ function ClassList(props: PropsClassList) {
   };
 
   const columns: GridColDef[] = [
-    { field: "course", headerName: "Course Name", type: "string", editable: true },
-    { field: "numberOfHours", headerName: "Hours", type: "number", editable: true },
-    { field: "date", headerName: "Date", type: "date", editable: true },
-    { field: "classType", headerName: "Type", type: "singleSelect", valueOptions: CLASS_TYPES, editable: true },
-    { field: "onlineUrl", headerName: "URL", type: "string", editable: true },
-    { field: "classroomName", headerName: "Classroom name", type: "string", editable: true },
+    { field: "course", headerName: "Course Name", type: "string", editable: true, minWidth: 120, flex: 2 },
+    { field: "numberOfHours", headerName: "Hours", type: "number", editable: true, minWidth: 70, flex: 1 },
+    { field: "date", headerName: "Date", type: "date", editable: true, minWidth: 100, flex: 1 },
+    { field: "classType", headerName: "Type", type: "singleSelect", valueOptions: CLASS_TYPES, editable: true, minWidth: 150, flex: 1 },
+    {
+      field: "onlineUrl",
+      headerName: "URL",
+      type: "string",
+      editable: true,
+      minWidth: 300,
+      flex: 2,
+      renderCell: (params) =>
+        params.value ? (
+          <a href={params.value} target="_blank">
+            {params.value}
+          </a>
+        ) : (
+          " - "
+        ),
+    },
+    { field: "classroomName", headerName: "Classroom name", type: "string", editable: true, minWidth: 100, flex: 2 },
   ];
 
   if (role !== "Student") {
@@ -178,11 +195,19 @@ function ClassList(props: PropsClassList) {
   }
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        p: { xs: 2, md: 4 },
+        height: "100%",
+        maxWidth: "100%",
+      }}>
       <Typography variant="h3" align="center">
         {rows.length > 0 && rows[0].course ? `Classes for ${rows[0].course}` : "Classes"}
       </Typography>
-      <div style={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -194,13 +219,18 @@ function ClassList(props: PropsClassList) {
           slots={{ toolbar: CustomToolbar }}
           showToolbar={role !== "Student"}
         />
-        {showErrorAlert && (
-          <Alert severity="warning" sx={{ my: 2 }}>
-            There was an error with the classes. Please try again.
-          </Alert>
-        )}
-      </div>
-    </div>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "end" }}>
+        <Button variant="contained" color="warning" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+      </Box>
+      {showErrorAlert && (
+        <Alert severity="warning" sx={{ my: 2 }}>
+          There was an error with the classes. Please try again.
+        </Alert>
+      )}
+    </Box>
   );
 }
 export default ClassList;

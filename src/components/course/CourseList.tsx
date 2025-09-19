@@ -1,4 +1,4 @@
-import { Alert, Typography } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowParams, type GridRowsProp } from "@mui/x-data-grid";
 import { COURSE_STATUS, type Course, type Enrollment, type EnrollmentFormData } from "../../types/types";
 import { useContext, useState } from "react";
@@ -108,19 +108,27 @@ function CourseList(props: PropsCourseList) {
       });
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        p: { xs: 2, md: 4 },
+        height: "100%",
+        maxWidth: "100%",
+      }}>
       <Typography variant="h3" align="center">
         {props.titleList}
       </Typography>
-      <div style={{ width: "100%" }}>
+       <Box sx={{ width: "100%" }}>
         <DataGrid rows={rows} columns={columns} />
-      </div>
+      </Box>
       {showErrorAlert && (
         <Alert severity="warning" sx={{ my: 2 }}>
           There was an error with the courses. Please try again.
         </Alert>
       )}
-    </div>
+    </Box>
   );
 }
 export default CourseList;

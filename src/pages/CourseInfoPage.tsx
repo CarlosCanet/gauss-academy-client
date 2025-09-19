@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { editCourse, getCourse, transformCourseToForm } from "../services/course.services";
 import LoadingGauss from "../components/UI/LoadingGauss";
-import { Alert } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 
 function CourseInfoPage() {
   const [formData, setFormData] = useState<CourseFormData>(initialCourseForm);
@@ -49,7 +49,16 @@ function CourseInfoPage() {
 
   return (
     <div>
-      {!formData ? <LoadingGauss /> : <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData} />}
+      {!formData ? (
+        <LoadingGauss />
+      ) : (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: { xs: 2, md: 4 } }}>
+          <Typography variant="h4" textAlign="center">
+            Edit course
+          </Typography>
+          <CourseForm actionText="Edit" handleSubmit={handleSubmit} formData={formData} setFormData={setFormData} />
+        </Box>
+      )}
       {showErrorAlert && (
         <Alert severity="error" sx={{ my: 2 }}>
           There was an error with the course. Please try again.

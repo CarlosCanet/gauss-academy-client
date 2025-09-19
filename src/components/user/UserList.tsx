@@ -1,5 +1,5 @@
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
-import { Alert, Avatar, Chip, Typography, type ChipProps } from "@mui/material";
+import { Alert, Avatar, Box, Chip, Typography, type ChipProps } from "@mui/material";
 import { ROLE_TYPES, type Role, type Teacher, type User } from "../../types/user";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
@@ -96,19 +96,27 @@ function UserList(props: PropsCourseList) {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        p: { xs: 2, md: 4 },
+        height: "100%",
+        maxWidth: "100%",
+      }}>
       <Typography variant="h3" align="center">
         Users
       </Typography>
-      <div style={{ width: "100%" }}>
+      <Box sx={{ width: "100%" }}>
         <DataGrid rows={rows} columns={columns} processRowUpdate={processRowUpdate} />
         {showErrorAlert && (
           <Alert severity="error" sx={{ my: 2 }}>
             There was an error with the user list. Please try again.
           </Alert>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 export default UserList;
