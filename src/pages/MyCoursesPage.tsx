@@ -47,7 +47,7 @@ function MyCoursesPage() {
   return (
     <div>
       {role === "Student" &&
-        (myCourses.length === 0 ? (
+        (!myCourses ? (
           <LoadingGauss />
         ) : (
           <>
