@@ -17,12 +17,20 @@ import OnlyAdmin from "./components/auth/OnlyAdmin";
 import CourseClassListPage from "./pages/CourseClassListPage";
 import UserListPage from "./pages/UserListPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import AdminDrawer from "./components/user/AdminDrawer";
+import { useContext, useState } from "react";
+import { AuthContext } from "./context/auth.context";
 
 function App() {
+  const { role } = useContext(AuthContext);
+
+  // elevated admin drawer state so it can be controlled from the App level
+  const [isAdminDrawerOpen, setIsAdminDrawerOpen] = useState(false);
 
   return (
     <>
-      <ResponsiveAppBar />
+  <ResponsiveAppBar onOpenAdminDrawer={() => setIsAdminDrawerOpen(true)} />
+  {role === "Admin" && <AdminDrawer isOpen={isAdminDrawerOpen} setIsOpen={setIsAdminDrawerOpen} />}
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<MainPage />} />
