@@ -11,14 +11,14 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate, Link } from "react-router";
-import { ThemeContext } from "../../context/theme.contex";
+import { ThemeContext } from "../../context/theme.context";
 import Switch from "@mui/material/Switch";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import LogoGauss from "../../assets/LogoGaussColor.png"
 
 type ResponsiveAppBarProps = {
   onOpenAdminDrawer?: () => void;
@@ -78,24 +78,9 @@ function ResponsiveAppBar({ onOpenAdminDrawer }: ResponsiveAppBarProps) {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}>
-            LOGO
-          </Typography>
-
+          <Link to="/">
+            <Box component="img" src={LogoGauss} alt="Gauss Academy Logo" loading="lazy" sx={{ display: { xs: "none", md: "flex" }, width: 84, height: 40 }} />
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -128,24 +113,10 @@ function ResponsiveAppBar({ onOpenAdminDrawer }: ResponsiveAppBarProps) {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}>
-            Gauss Academy
-          </Typography>
+
+          <Box component={Link} to="/" sx={{display: { xs: "flex", md: "none" }, flexGrow: 1}}>
+            <Box component="img" src={LogoGauss} alt="Gauss Academy Logo" loading="lazy" sx={{  width: 84, height: 40,  }} />
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button

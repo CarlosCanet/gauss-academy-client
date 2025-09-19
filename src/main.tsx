@@ -10,7 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { BrowserRouter } from "react-router";
 import { AuthWrapper } from "./context/auth.context.tsx";
-import { ThemeWrapper } from "./context/theme.contex.tsx";
+import { ThemeWrapper } from "./context/theme.context.tsx";
 
 const container = document.getElementById("root")!;
 // const root = createRoot(container, {
