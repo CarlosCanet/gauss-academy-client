@@ -1,6 +1,7 @@
 import type { Course } from "./types";
 
-export type Role = "Student" | "Teacher" | "Staff" | "Admin" | null;
+export type Role = "Student" | "Teacher" | "Staff" | "Admin";
+export const ROLE_TYPES: Role[] = ["Student", "Teacher", "Staff", "Admin"];
 
 export interface UserCredentials {
   email: string,
@@ -15,26 +16,29 @@ export interface User {
   email: string,
   password: string,
   dni: string,
-  mobileNumber: number,
+  mobileNumber: string,
   profileImageUrl: string,
+  role: Role
 }
 
-export const initialUser: User = {
-  _id: "",
+export type UserFormData = Omit<User, "_id" | "dateOfBirth" | "role"> & { dateOfBirth: string };
+export type UserFormErrors = Partial<Record<keyof UserFormData, string>>;
+
+export const initialUser: UserFormData = {
   firstName: "",
   lastName: "",
-  dateOfBirth: new Date(),
+  dateOfBirth: "",
   email: "",
   password: "",
   dni: "",
-  mobileNumber: 0,
+  mobileNumber: "",
   profileImageUrl: ""
 };
 
 export interface Teacher extends User {
-  previousCourses: Course[],
-  activeCourses: Course[]
+  teacherProfile: {
+    description: string,
+    previousCourses: Course[],
+    activeCourses: Course[]
+  }
 }
-
-export type UserInfoFormData = Omit<User, "_id">;
-export type UserInfoFormErrors = Partial<Record<keyof UserInfoFormData, string>>;

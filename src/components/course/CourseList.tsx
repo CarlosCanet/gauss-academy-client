@@ -1,0 +1,134 @@
+import { Alert, Box, Typography } from "@mui/material";
+import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowParams, type GridRowsProp } from "@mui/x-data-grid";
+import { COURSE_STATUS, type Course, type Enrollment, type EnrollmentFormData } from "../../types/types";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SchoolIcon from "@mui/icons-material/School";
+// import CancelIcon from '@mui/icons-material/Cancel';
+import { createEnrollment } from "../../services/enrollment.services";
+import { createNewPayment } from "../../services/payment.services";
+
+type PropsCourseList = {
+  titleList: string;
+  courseList: Course[];
+  enrollmentList?: Enrollment[];
+  onDelete?: (courseId: string) => Promise<void>;
+};
+
+function CourseList(props: PropsCourseList) {
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { role, loggedUserId } = useContext(AuthContext);
+
+  const handleCreateEnrollment = async (params: GridRowParams) => {
+    const enrollmentData: EnrollmentFormData = {
+      course: params.row.id,
+      student: loggedUserId as string,
+      endDate: "",
+    };
+    try {
+      const newEnrollment = await createEnrollment(params.row.id, enrollmentData);
+      await createNewPayment(newEnrollment._id);
+      navigate(0);
+    } catch (error) {
+      console.error(error);
+      setShowErrorAlert(true);
+    }
+  };
+
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Course Name" },
+    { field: "status", headerName: "status", editable: true, valueOptions: COURSE_STATUS, type: "singleSelect" },
+    { field: "startDate", headerName: "Start date" },
+    { field: "endDate", headerName: "End date" },
+    { field: "numberOfHours", headerName: "Hours num" },
+    { field: "price", headerName: "Price" },
+    {
+      field: "classes",
+      headerName: "Classes",
+      sortable: false,
+      renderCell: (params) => (
+        <GridActionsCellItem icon={<SchoolIcon />} label="Classes" onClick={() => navigate(`/course/${params.row.id}/classes`)} />
+      ),
+    },
+  ];
+  if (role === "Student") {
+    if (props.titleList !== "My courses") {
+      columns.push({
+        field: "enrollment",
+        headerName: "Enroll",
+        sortable: false,
+        type: "actions",
+        getActions: (params) => {
+          return [<GridActionsCellItem icon={<EditIcon />} label="Enroll" onClick={() => handleCreateEnrollment(params)} />];
+        },
+      });
+    }
+  } else {
+    columns.push({
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      sortable: false,
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={() => navigate(`/course/${id}`)} />,
+          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => props.onDelete!(id.toString())} />,
+        ];
+      },
+    });
+  }
+
+  const rows: GridRowsProp = props.enrollmentList
+    ? props.enrollmentList.map((enrollment) => {
+        const course = enrollment.course as Course;
+        return {
+          id: course._id,
+          name: course.name,
+          status: course.status,
+          startDate: course.startDate,
+          endDate: course.endDate,
+          numberOfHours: course.numberOfHours,
+          price: `${course.price} €`,
+        };
+      })
+    : props.courseList.map((course) => {
+        return {
+          id: course._id,
+          name: course.name,
+          status: course.status,
+          startDate: course.startDate,
+          endDate: course.endDate,
+          numberOfHours: course.numberOfHours,
+          price: `${course.price} €`,
+        };
+      });
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        p: { xs: 2, md: 4 },
+        height: "100%",
+        maxWidth: "100%",
+      }}>
+      <Typography variant="h3" align="center">
+        {props.titleList}
+      </Typography>
+       <Box sx={{ width: "100%" }}>
+        <DataGrid rows={rows} columns={columns} />
+      </Box>
+      {showErrorAlert && (
+        <Alert severity="warning" sx={{ my: 2 }}>
+          There was an error with the courses. Please try again.
+        </Alert>
+      )}
+    </Box>
+  );
+}
+export default CourseList;

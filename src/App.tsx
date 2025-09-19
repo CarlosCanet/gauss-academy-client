@@ -1,21 +1,38 @@
 import { Route, Routes } from "react-router";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
-import ResponsiveAppBar from "./components/main/ResponsiveAppBar";
-import MainPage from "./pages/public/MainPage";
-import NotFoundPage from "./pages/public/NotFoundPage";
-import CoursesPage from "./pages/public/CoursesPage";
-import TeachersPage from "./pages/public/TeachersPage";
-import MethodologyPage from "./pages/public/MethodologyPage";
-import { ContactPage } from "@mui/icons-material";
-import OnlyRegistered from "./components/protection/OnlyRegistered";
-import ProfilePage from "./pages/private/ProfilePage";
+import ResponsiveAppBar from "./components/UI/ResponsiveAppBar";
+import MainPage from "./pages/MainPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import CoursesPage from "./pages/CoursesPage";
+import TeachersPage from "./pages/TeachersPage";
+import MethodologyPage from "./pages/MethodologyPage";
+import OnlyRegistered from "./components/auth/OnlyRegistered";
+import ProfilePage from "./pages/ProfilePage";
+import MyCoursesPage from "./pages/MyCoursesPage";
+import CourseInfoPage from "./pages/CourseInfoPage";
+import ContactPage from "./pages/ContactPage";
+import CourseNewPage from "./pages/CourseNewPage";
+import OnlyAdmin from "./components/auth/OnlyAdmin";
+import CourseClassListPage from "./pages/CourseClassListPage";
+import UserListPage from "./pages/UserListPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import AdminDrawer from "./components/user/AdminDrawer";
+import { useContext, useState } from "react";
+import { AuthContext } from "./context/auth.context";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
+  const { role } = useContext(AuthContext);
+  const [isAdminDrawerOpen, setIsAdminDrawerOpen] = useState(false);
 
   return (
     <>
-      <ResponsiveAppBar />
+      <ResponsiveAppBar onOpenAdminDrawer={() => setIsAdminDrawerOpen(true)} />
+      <div style={{ height: 64 }} aria-hidden />
+
+      {role === "Admin" && <AdminDrawer isOpen={isAdminDrawerOpen} setIsOpen={setIsAdminDrawerOpen} />}
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<MainPage />} />
@@ -25,12 +42,22 @@ function App() {
         <Route path="/teachers" element={<TeachersPage />} />
         <Route path="/methodology" element={<MethodologyPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        
+
         {/* PRIVATE ROUTES */}
-        <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>} />
+        <Route path="/profile" element={<OnlyRegistered><ProfilePage /></OnlyRegistered>}/>
+        <Route path="/my-courses" element={<OnlyRegistered><MyCoursesPage /></OnlyRegistered>}/>
+        <Route  path="/course/:courseId" element={<OnlyRegistered><CourseInfoPage /></OnlyRegistered>}/>
+        <Route path="/course/newCourse" element={<OnlyAdmin><CourseNewPage /></OnlyAdmin>}/>
+        <Route path="/course/:courseId/classes" element={<OnlyRegistered><CourseClassListPage /></OnlyRegistered>}/>
+        <Route path="/checkout" element={<OnlyRegistered><CheckoutPage /></OnlyRegistered>}/>
+        <Route path="/payment-success" element={<OnlyRegistered><PaymentSuccessPage /></OnlyRegistered>}/>
 
+        {/* ADMIN ROUTES */}
+        <Route path="/users" element={<OnlyAdmin><UserListPage /></OnlyAdmin>}/>
 
+        {/* ERROR ROUTES */}
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </>
   );

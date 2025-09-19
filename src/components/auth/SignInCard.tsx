@@ -1,52 +1,39 @@
-import { Box, Button, Card, Link, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Card, Link, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { Link as LinkRouter, useNavigate } from "react-router"
-import { service } from "../../services/config.services";
+import { Link as LinkRouter, useNavigate } from "react-router";
 import { AuthContext } from "../../context/auth.context";
-
-interface LoginFormData {
-  email: string,
-  password: string
-}
+import type { UserCredentials } from "../../types/user";
+import { loginUser } from "../../services/user.services";
 
 function SignInCard() {
-  const [formData, setFormData] = useState<LoginFormData>({ email: "", password: "" });
+  const [formData, setFormData] = useState<UserCredentials>({ email: "", password: "" });
+  const [showErrorAlert, setShowAlert] = useState<boolean>(false);
   const { authenticateUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => setFormData(prevState => ({ ...prevState, [event.target.name]: event.target.value }));
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
   const handleSubmit = async (event: React.FormEvent) => {
     try {
       event.preventDefault();
-      const response = await service.post("/auth/login", formData);
-      localStorage.setItem("authToken", response.data.authToken);
+      const response = await loginUser(formData);
+      localStorage.setItem("authToken", response.authToken);
       await authenticateUser();
-      navigate("/");
-      console.log("Welcome!");
+      navigate("/my-courses");
     } catch (error) {
-      console.log("Error login: ", error);
+      console.error("Error login: ", error);
+      setShowAlert(true);
     }
-  }
+  };
 
   return (
-    <Card variant="outlined" sx={{padding: "25px"}}>
-      <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        Gauss Academy
-      </Box>
-       <Typography
-        component="h1"
-        variant="h4"
-        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-      >
+    <Card variant="outlined" sx={{ display: "flex", flexDirection: "column", p: {xs: 4, md: 5}}}>
+      <Box sx={{ display: { xs: "flex", md: "none" } }}>Gauss Academy</Box>
+      <Typography component="h1" variant="h4" sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)", mb: 3 }}>
         Sign in
       </Typography>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        noValidate
-        sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
-      >
-      <TextField
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 3 }}>
+        <TextField
           error={false}
           // helperText="error"
           type="email"
@@ -77,21 +64,21 @@ function SignInCard() {
         <Button type="submit" fullWidth variant="contained">
           Sign in
         </Button>
-         <Typography sx={{ textAlign: 'center' }}>
-          Don&apos;t have an account?{' '}
+        <Typography sx={{ textAlign: "center" }}>
+          Don&apos;t have an account?{" "}
           <span>
-            <Link
-              component={LinkRouter}
-              to="/signup"
-              variant="body2"
-              sx={{ alignSelf: 'center' }}
-            >
+            <Link component={LinkRouter} to="/signup" variant="body2" sx={{ alignSelf: "center" }}>
               Sign up
             </Link>
           </span>
         </Typography>
       </Box>
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the login. Please try again.
+        </Alert>
+      )}
     </Card>
-  )
+  );
 }
-export default SignInCard
+export default SignInCard;

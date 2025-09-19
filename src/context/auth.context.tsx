@@ -1,12 +1,14 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
-import { service } from "../services/config.services";
 import type { Role } from "../types/user";
-
+import { getMyProfile, verifyUser } from "../services/user.services";
+import LoadingGauss from "../components/UI/LoadingGauss";
 
 // Context component (that sends the state contexts and functions)
 type AuthContextType = {
   isLoggedIn: boolean;
   loggedUserId: string | null;
+  username: string | null;
+  profileImgUrl: string | null;
   role: Role | null;
   authenticateUser: () => Promise<void>;
 };
@@ -14,51 +16,50 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   loggedUserId: null,
+  username: null,
+  profileImgUrl: null,
   role: null,
   authenticateUser: async () => {},
 });
 
+type userContextType = Omit<AuthContextType, "authenticateUser"> & { isAuthenticating: boolean };
+
 function AuthWrapper(props: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [loggedUserId, setLoggedUserId] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [role, setRole] = useState<Role>(null);
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
+  const [userContext, setUserContext] = useState<userContextType>({
+    isLoggedIn: false,
+    loggedUserId: null,
+    username: null,
+    profileImgUrl: null,
+    role: null,
+    isAuthenticating: true,
+  });
   useEffect(() => {
     authenticateUser();
   }, []);
 
   const authenticateUser = async () => {
     try {
-      const response = await service.get("/auth/verify");
-      console.log("Ok", response);
-      setIsLoggedIn(true);
-      setLoggedUserId(response.data._id);
-      setUsername(response.data.firstName);
-      setRole(response.data.role);
-      setIsAuthenticating(false);
+      await verifyUser();
+      const userProfile = await getMyProfile();
+      setUserContext({isLoggedIn: true,
+        loggedUserId: userProfile._id,
+        username: userProfile.firstName,
+        profileImgUrl: userProfile.profileImageUrl,
+        role: userProfile.role,
+        isAuthenticating: false,
+      });
     } catch (error) {
-      console.log("Nope", error);
-      setIsLoggedIn(false);
-      setUsername(null);
-      setLoggedUserId(null);
-      setRole(null);
-      setIsAuthenticating(false);
+      console.error("Error authenticating: ", error);
+      setUserContext({ isLoggedIn: false, loggedUserId: null, username: null, profileImgUrl: null, role: null, isAuthenticating: false });
     }
+  };
+
+  const passedContext = { ...userContext, authenticateUser };
+
+  if (userContext.isAuthenticating) {
+    return <LoadingGauss />;
   }
 
- const passedContext = { isLoggedIn, loggedUserId, role, username, authenticateUser };
-
-  if (isAuthenticating) {
-    return (
-      <h3>Authenticating user...</h3>
-    );
-  }
-
-  return (
-    <AuthContext.Provider value={passedContext}>
-      {props.children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={passedContext}>{props.children}</AuthContext.Provider>;
 }
-export {AuthWrapper, AuthContext }
+export { AuthWrapper, AuthContext };
