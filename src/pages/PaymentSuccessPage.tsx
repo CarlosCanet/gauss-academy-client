@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import LoadingGauss from "../components/UI/LoadingGauss";
 import { updatePayment } from "../services/payment.services";
+import { Container, Typography } from "@mui/material";
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
@@ -35,10 +36,10 @@ const PaymentSuccessPage = () => {
   }
 
   return (
-    <div>
-      <h1>Thank you for your order!</h1>
+    <Container>
+      <Typography variant="h1">Thank you for your order!</Typography>
       <Link to={"/"}>Go back to Home</Link>
-    </div>
+    </Container>
   );
 };
 
