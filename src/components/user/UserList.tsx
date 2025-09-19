@@ -1,5 +1,5 @@
 import { DataGrid, type GridColDef, type GridRowsProp } from "@mui/x-data-grid";
-import { Avatar, Chip, Typography, type ChipProps } from "@mui/material";
+import { Alert, Avatar, Chip, Typography, type ChipProps } from "@mui/material";
 import { ROLE_TYPES, type Role, type Teacher, type User } from "../../types/user";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
@@ -12,6 +12,7 @@ type PropsCourseList = {
 };
 
 function UserList(props: PropsCourseList) {
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const { role } = useContext(AuthContext);
   const [rows, setRows] = useState<GridRowsProp>([]);
   useEffect(() => {
@@ -78,7 +79,7 @@ function UserList(props: PropsCourseList) {
   const columns = [...baseColumns, ...extraColumns];
 
   const processRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
-    const changeFields = Object.keys(newRow).filter(field => newRow[field] !== oldRow[field]);
+    const changeFields = Object.keys(newRow).filter((field) => newRow[field] !== oldRow[field]);
     try {
       if (changeFields.includes("role")) {
         await assignRoleToUser(newRow.id, newRow.role);
@@ -87,7 +88,8 @@ function UserList(props: PropsCourseList) {
         await updateTeacherDescription(newRow.id, newRow.description);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setShowErrorAlert(true);
     }
     setRows((prevRows) => prevRows.map((row) => (row.id == newRow.id ? { ...row, ...newRow } : row)));
     return newRow;
@@ -100,6 +102,11 @@ function UserList(props: PropsCourseList) {
       </Typography>
       <div style={{ width: "100%" }}>
         <DataGrid rows={rows} columns={columns} processRowUpdate={processRowUpdate} />
+        {showErrorAlert && (
+          <Alert severity="error" sx={{ my: 2 }}>
+            There was an error with the user list. Please try again.
+          </Alert>
+        )}
       </div>
     </div>
   );

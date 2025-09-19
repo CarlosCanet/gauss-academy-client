@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import type { Course } from "../types/types";
 import CourseList from "../components/course/CourseList";
 import { AuthContext } from "../context/auth.context";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { deleteCourse, getAllActiveCourses, getAllCourses } from "../services/course.services";
 import { getMyEnrollments } from "../services/enrollment.services";
 import LoadingGauss from "../components/UI/LoadingGauss";
@@ -10,6 +10,7 @@ import LoadingGauss from "../components/UI/LoadingGauss";
 function MyCoursesPage() {
   const [myCourses, setMyCourses] = useState<Course[]>([]);
   const [activeCourses, setActiveCourses] = useState<Course[]>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const { role } = useContext(AuthContext);
   useEffect(() => {
     getData();
@@ -29,6 +30,7 @@ function MyCoursesPage() {
       setActiveCourses(activeCourses);
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -38,6 +40,7 @@ function MyCoursesPage() {
       getData();
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -66,6 +69,11 @@ function MyCoursesPage() {
             </Button>
           </>
         ))}
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the courses. Please try again.
+        </Alert>
+      )}
     </div>
   );
 }

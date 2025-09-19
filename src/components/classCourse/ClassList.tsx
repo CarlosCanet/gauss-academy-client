@@ -1,4 +1,4 @@
-import { Tooltip, Typography } from "@mui/material";
+import { Alert, Tooltip, Typography } from "@mui/material";
 import {
   DataGrid,
   Toolbar,
@@ -28,6 +28,7 @@ type PropsClassList = {
 
 function ClassList(props: PropsClassList) {
   const [rows, setRows] = useState<GridRowsProp>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const { role } = useContext(AuthContext);
   useEffect(() => {
@@ -52,6 +53,7 @@ function ClassList(props: PropsClassList) {
       );
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -63,7 +65,7 @@ function ClassList(props: PropsClassList) {
     { field: "onlineUrl", headerName: "URL", type: "string", editable: true },
     { field: "classroomName", headerName: "Classroom name", type: "string", editable: true },
   ];
-  
+
   if (role !== "Student") {
     columns.push({
       field: "actions",
@@ -119,6 +121,7 @@ function ClassList(props: PropsClassList) {
       getData();
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -145,6 +148,7 @@ function ClassList(props: PropsClassList) {
       return newRow;
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -190,6 +194,11 @@ function ClassList(props: PropsClassList) {
           slots={{ toolbar: CustomToolbar }}
           showToolbar={role !== "Student"}
         />
+        {showErrorAlert && (
+          <Alert severity="warning" sx={{ my: 2 }}>
+            There was an error with the classes. Please try again.
+          </Alert>
+        )}
       </div>
     </div>
   );

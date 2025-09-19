@@ -1,6 +1,6 @@
 // import { useState } from "react";
 
-import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Alert, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import type { Course } from "../types/types";
 import { getPublicInfoFromAllActiveCourses } from "../services/course.services";
@@ -8,6 +8,7 @@ import LoadingGauss from "../components/UI/LoadingGauss";
 
 function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   useEffect(() => {
     getData();
   }, []);
@@ -18,6 +19,7 @@ function CoursesPage() {
       setCourses(courses);
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -38,6 +40,11 @@ function CoursesPage() {
             );
           })}
         </List>
+      )}
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the courses. Please try again.
+        </Alert>
       )}
     </div>
   );

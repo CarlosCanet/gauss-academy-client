@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, TextField } from "@mui/material";
+import { Alert, Avatar, Button, Grid, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useContext, useEffect, useState } from "react";
 import { initialUser, type UserFormData, type UserFormErrors } from "../../types/user";
@@ -34,6 +34,7 @@ function UserInfoForm(props: PropsUserInfo) {
   const [formErrors, setFormErrors] = useState<UserFormErrors>({});
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [fileInfo, setFileInfo] = useState<FileInfo>({ file: null, previewURL: "" });
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const { isLoggedIn, profileImgUrl } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
@@ -48,6 +49,7 @@ function UserInfoForm(props: PropsUserInfo) {
       setFormData(transformUserToForm(userData));
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -70,7 +72,6 @@ function UserInfoForm(props: PropsUserInfo) {
         setIsUploading(true);
         const uploadData = new FormData();
         uploadData.append("image", fileInfo.file);
-        console.log("Uploading");
         const cloudinaryImageUrl = await uploadImage(uploadData);
         setIsUploading(false);
         newFormData = { ...newFormData, profileImageUrl: cloudinaryImageUrl };
@@ -81,7 +82,8 @@ function UserInfoForm(props: PropsUserInfo) {
         setFormErrors(errors);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -210,10 +212,15 @@ function UserInfoForm(props: PropsUserInfo) {
         </Button>
       </Grid>
       <Grid size={3}>
-        <Button variant="outlined" fullWidth color="error" onClick={()=> navigate(-1)}>
+        <Button variant="outlined" fullWidth color="error" onClick={() => navigate(-1)}>
           Back
         </Button>
       </Grid>
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the form. Please try again.
+        </Alert>
+      )}
     </Grid>
   );
 }

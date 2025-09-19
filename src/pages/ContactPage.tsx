@@ -19,8 +19,7 @@ function ContactPage() {
     e.preventDefault();
     setStatus(null);
     try {
-      const response = await sendEmail(form);
-      console.log(response)
+      await sendEmail(form);
       setForm(initialEmail);
       setStatus("success");
       setTimeout(() => setStatus(null), 10000);
@@ -32,7 +31,6 @@ function ContactPage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>
-      {/* Encabezado */}
       <Typography variant="h2" align="center" gutterBottom>
         Contact Us
       </Typography>
@@ -107,7 +105,6 @@ function ContactPage() {
           </Card>
         </Grid>
 
-        {/* Formulario */}
         <Grid size={{ xs: 12, md: 7 }}>
           <Card sx={{ p: 3 }}>
             <form onSubmit={handleSubmit}>

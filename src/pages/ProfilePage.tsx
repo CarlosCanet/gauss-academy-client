@@ -7,19 +7,21 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/auth.context";
 
 function ProfilePage() {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const { authenticateUser } = useContext(AuthContext);
   const handleSubmit = async (formData: UserFormData) => {
     try {
       await editProfile(formData);
       await authenticateUser();
-      setShowAlert(true);
+      setShowSuccessAlert(true);
       setTimeout(() => {
-        setShowAlert(false);
+        setShowSuccessAlert(false);
       }, 4000);
       return null;
     } catch (error) {
       console.error("Error login: ", error);
+      setShowErrorAlert(true);
       if (error instanceof AxiosError && error.response) {
         return Object.fromEntries(
           Object.entries(error.response.data).map(([fieldName, value]) => [
@@ -37,13 +39,23 @@ function ProfilePage() {
       <Grid size={10} offset={1}>
         <UserInfoForm handleSubmit={handleSubmit} actionText="Edit info" />
       </Grid>
-      {showAlert && (
+      {showSuccessAlert && (
         <Grid size={4} offset={7}>
           <Alert severity="success">
             <AlertTitle>Profile changed</AlertTitle>
             The new data is already changed.
           </Alert>
         </Grid>
+      )}
+      {showSuccessAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the login. Please try again.
+        </Alert>
+      )}
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the login. Please try again.
+        </Alert>
       )}
     </Grid>
   );

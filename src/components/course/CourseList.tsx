@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowParams, type GridRowsProp } from "@mui/x-data-grid";
 import { COURSE_STATUS, type Course, type Enrollment, type EnrollmentFormData } from "../../types/types";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,6 +19,7 @@ type PropsCourseList = {
 };
 
 function CourseList(props: PropsCourseList) {
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const navigate = useNavigate();
   const { role, loggedUserId } = useContext(AuthContext);
 
@@ -34,16 +35,9 @@ function CourseList(props: PropsCourseList) {
       navigate(0);
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
-
-  // const handleCancelEnrollment = async (params: GridRowParams) => {
-  //   try {
-  //     await deleteEnrollment(params.row.id);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Course Name" },
@@ -62,9 +56,7 @@ function CourseList(props: PropsCourseList) {
     },
   ];
   if (role === "Student") {
-    if (props.titleList === "My courses") {
-      console.log("A");
-    } else {
+    if (props.titleList !== "My courses") {
       columns.push({
         field: "enrollment",
         headerName: "Enroll",
@@ -123,7 +115,11 @@ function CourseList(props: PropsCourseList) {
       <div style={{ width: "100%" }}>
         <DataGrid rows={rows} columns={columns} />
       </div>
-      {/* {showPaymentIntent && <PaymentIntent productDetails={{ amount: 1500, currency: "eur" }} />} */}
+      {showErrorAlert && (
+        <Alert severity="warning" sx={{ my: 2 }}>
+          There was an error with the courses. Please try again.
+        </Alert>
+      )}
     </div>
   );
 }

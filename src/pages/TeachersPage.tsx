@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Teacher } from "../types/user";
-import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Alert, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { getPublicInfoFromAllTeachers } from "../services/user.services";
 import LoadingGauss from "../components/UI/LoadingGauss";
 
 function TeachersPage() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   useEffect(() => {
     getData();
   }, []);
@@ -16,6 +17,7 @@ function TeachersPage() {
       setTeachers(teachers);
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
     }
   };
 
@@ -36,6 +38,11 @@ function TeachersPage() {
             );
           })}
         </List>
+      )}
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the teachers. Please try again.
+        </Alert>
       )}
     </div>
   );

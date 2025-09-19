@@ -3,12 +3,13 @@ import { type Course, type Enrollment, type Payment } from "../types/types";
 import { getMyPendingPayments } from "../services/payment.services";
 import { loadStripe, type StripeElementsOptions } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { Card, CardActionArea, CardContent, Container, Typography } from "@mui/material";
+import { Alert, Card, CardActionArea, CardContent, Container, Typography } from "@mui/material";
 import CheckoutForm from "../components/payment/CheckoutForm";
 import LoadingGauss from "../components/UI/LoadingGauss";
 
 function CheckoutPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [showErrorAlert, setShowErrorAlert] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     getData();
@@ -18,10 +19,10 @@ function CheckoutPage() {
       setIsLoading(true);
       const foundPayments = await getMyPendingPayments();
       setPayments(foundPayments);
-      console.log(foundPayments);
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setShowErrorAlert(true);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -33,27 +34,30 @@ function CheckoutPage() {
 
   return (
     <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem", marginTop: "3rem" }}>
-      <>
-        <Card variant="elevation" sx={{ bgcolor: "#f5f5f5", padding: "10px 10px" }}>
-          <CardActionArea>
-            {isLoading ? (
-              <LoadingGauss />
-            ) : payments.length === 0 ? (
-              <Typography variant="h3">You have no pending payments</Typography>
-            ) : (
-              <CardContent>
-                <Typography variant="h4">{`Payment for ${course?.name ?? "course"}`}</Typography>
-                <Typography variant="h5">{`Total: ${payments[0].price}.00 €`}</Typography>
-              </CardContent>
-            )}
-          </CardActionArea>
-        </Card>
-        {options ? (
-          <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
-        ) : null}
-      </>
+      <Card variant="elevation" sx={{ bgcolor: "#f5f5f5", padding: "10px 10px" }}>
+        <CardActionArea>
+          {isLoading ? (
+            <LoadingGauss />
+          ) : payments.length === 0 ? (
+            <Typography variant="h3">You have no pending payments</Typography>
+          ) : (
+            <CardContent>
+              <Typography variant="h4">{`Payment for ${course?.name ?? "course"}`}</Typography>
+              <Typography variant="h5">{`Total: ${payments[0].price}.00 €`}</Typography>
+            </CardContent>
+          )}
+        </CardActionArea>
+      </Card>
+      {options ? (
+        <Elements options={options} stripe={stripePromise}>
+          <CheckoutForm />
+        </Elements>
+      ) : null}
+      {showErrorAlert && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          There was an error with the login. Please try again.
+        </Alert>
+      )}
     </Container>
   );
 }
